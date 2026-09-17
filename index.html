@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Prompt', sans-serif; background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; height: 100dvh; overflow: hidden; touch-action: manipulation; }
+    .container { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); width: 92%; max-width: 420px; height: 96%; max-height: 900px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 15px; box-sizing: border-box; display: flex; flex-direction: column; overflow-y: auto; }
+    .hidden { display: none !important; }
+    .view-center { justify-content: center; align-items: center; text-align: center; }
+    
+    .header-area { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; width: 100%; }
+    .org-logo { max-width: 140px; max-height: 80px; object-fit: contain; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .login-logo { width: 180px; max-width: 90%; margin-bottom: 25px; cursor: pointer; }
+    .profile-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #0066ff; }
+    
+    .info-area { text-align: center; margin-bottom: 10px; }
+    .staff-name { font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 2px; }
+    .instruction { font-size: 13px; color: #7f8c8d; }
+    
+    /* กล่องข้อเสนอแนะและปุ่มไมค์ */
+    .feedback-box { display: flex; align-items: center; background: #fff; border: 2px solid #eef2f6; border-radius: 12px; padding: 5px; margin-bottom: 10px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+    .feedback-input { flex: 1; border: none; font-size: 15px; font-family: 'Prompt', sans-serif; outline: none; background: transparent; padding: 10px; color: #333; }
+    .mic-btn { font-size: 22px; background: #f0f4f8; border: none; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; }
+    .mic-recording { background: #ff4757; color: white; animation: pulse 1s infinite; }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    
+    .rating-list { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; padding-bottom: 5px; }
+    .rating-card { flex: 1; max-height: 65px; display: flex; align-items: center; background: #ffffff; border: 2px solid #f0f3f6; border-radius: 14px; padding: 0 15px; cursor: pointer; transition: all 0.1s; -webkit-tap-highlight-color: transparent; }
+    .rating-card:active { transform: scale(0.97); border-color: #0066ff; background: #f0f7ff; }
+    .rating-emoji { font-size: 34px; margin-right: 15px; }
+    .rating-label { font-size: 16px; font-weight: 500; color: #34495e; }
+    
+    input { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #eef2f6; border-radius: 12px; font-size: 16px; font-family: 'Prompt', sans-serif; box-sizing: border-box; }
+    input[type="file"] { padding: 10px; font-size: 14px; background: #f9f9f9; border: 2px dashed #ccc; }
+    .btn { background-color: #0066ff; color: white; border: none; padding: 15px; font-size: 18px; border-radius: 12px; width: 100%; margin-top: 10px; font-weight: 600; font-family: 'Prompt', sans-serif; cursor: pointer; }
+    .btn-secondary { background-color: #95a5a6; }
+    .icon-thankyou { font-size: 80px; margin: 0; }
+    
+    #offlineBanner { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #e74c3c; color: white; padding: 12px; text-align: center; font-size: 14px; z-index: 9999; transition: transform 0.3s; }
+    .banner-hidden { transform: translateY(100%); }
+  </style>
+</head>
+<body onload="checkConnection()">
+
+  <div id="offlineBanner" class="banner-hidden">
+    🔴 ออฟไลน์ (ข้อมูลจะถูกบันทึกชั่วคราว) <span id="offlineCount"></span>
+  </div>
+
+  <!-- Login -->
+  <div id="loginView" class="container view-center">
+    <img id="orgLogoLogin" class="login-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" onclick="hiddenAddStaff()">
+    <h2 style="color: #2c3e50; margin-top:0;">เข้าสู่ระบบเจ้าหน้าที่</h2>
+    <input type="text" id="staffId" placeholder="รหัสพนักงาน" required>
+    <input type="password" id="password" placeholder="รหัสผ่าน" required>
+    <button type="button" class="btn" onclick="doLogin()">เข้าสู่ระบบ</button>
+    <p id="loginStatus" style="color:#e74c3c; margin-top: 15px;"></p>
+  </div>
+
+  <!-- Add Staff -->
+  <div id="addStaffView" class="container view-center hidden">
+    <h2 style="color: #2c3e50; margin-top:0;">เพิ่มพนักงานใหม่</h2>
+    <input type="text" id="newStaffId" placeholder="รหัสพนักงาน" required>
+    <input type="text" id="newPassword" placeholder="รหัสผ่าน" required>
+    <input type="text" id="newName" placeholder="ชื่อ - นามสกุล" required>
+    <input type="file" id="newPhoto" accept="image/*">
+    <button type="button" class="btn" id="addBtn" onclick="submitNewStaff()">💾 บันทึกข้อมูล</button>
+    <button type="button" class="btn btn-secondary" onclick="switchView('loginView')">ยกเลิก</button>
+    <p id="addStatus" style="font-weight: 500; margin-top: 15px;"></p>
+  </div>
+
+  <!-- Rating View -->
+  <div id="ratingView" class="container hidden">
+    <div class="header-area">
+      <img id="orgLogo" class="org-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" onclick="hiddenLogout()">
+      <img id="staffPhoto" class="profile-img" id="staffPhotoDisplay">
+    </div>
+    <div class="info-area">
+      <div id="staffNameDisplay" class="staff-name">ชื่อ-นามสกุล</div>
+      <div class="instruction">กรุณาประเมินความพึงพอใจในการให้บริการ</div>
+    </div>
+    
+    <div class="feedback-box">
+      <input type="text" id="feedbackInput" class="feedback-input" placeholder="พิมพ์ข้อความ หรือแตะไมค์เพื่อพูด...">
+      <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎤</button>
+    </div>
+
+    <div class="rating-list">
+      <div class="rating-card" onclick="sendRating(5)"><div class="rating-emoji">😍</div><div class="rating-label">พอใจมาก</div></div>
+      <div class="rating-card" onclick="sendRating(4)"><div class="rating-emoji">🙂</div><div class="rating-label">พอใจ</div></div>
+      <div class="rating-card" onclick="sendRating(3)"><div class="rating-emoji">😐</div><div class="rating-label">ปานกลาง</div></div>
+      <div class="rating-card" onclick="sendRating(2)"><div class="rating-emoji">😟</div><div class="rating-label">ไม่พอใจ</div></div>
+      <div class="rating-card" onclick="sendRating(1)"><div class="rating-emoji">😡</div><div class="rating-label">ไม่พอใจมาก</div></div>
+    </div>
+  </div>
+
+  <!-- Thank You -->
+  <div id="thankyouView" class="container hidden view-center">
+    <div class="icon-thankyou">🙏</div>
+    <h2 style="color: #0066ff;">ขอบคุณสำหรับการประเมิน</h2>
+  </div>
+
+  <script>
+    // ==========================================
+    // ใส่ลิงก์ Web App จาก Apps Script ที่นี่ !!!
+    // ==========================================
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZLRzk7lntw9h_WSk9qIQLPPri9_urh9wZRWrmGDBYjvj9jUKujFPTXP5bLFGpUV45Zg/exec";
+
+    let currentStaff = {};
+    let tapCount = 0, tapTimer;
+    let loginTapCount = 0, loginTapTimer;
+
+    // ฟังก์ชันเชื่อมต่อกับ Apps Script
+    async function apiCall(action, payload) {
+      payload.action = action;
+      try {
+        const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+        return await response.json();
+      } catch (error) {
+        return { success: false, message: "เชื่อมต่อขัดข้อง หรือออฟไลน์" };
+      }
+    }
+
+    /* === ระบบไมโครโฟน (ทำงาน 100% เมื่อแยกโฮสต์) === */
+    let recognition;
+    let isRecording = false;
+
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = 'th-TH';
+      recognition.interimResults = false;
+      
+      recognition.onresult = function(event) {
+        document.getElementById('feedbackInput').value += (document.getElementById('feedbackInput').value ? " " : "") + event.results[0][0].transcript;
+      };
+      recognition.onend = stopMic;
+      recognition.onerror = stopMic;
+    } else {
+      document.getElementById('micBtn').style.display = 'none';
+    }
+
+    function toggleMic() { isRecording ? stopMic() : startMic(); }
+    function startMic() { isRecording = true; document.getElementById('micBtn').classList.add('mic-recording'); try{ recognition.start(); }catch(e){} }
+    function stopMic() { isRecording = false; document.getElementById('micBtn').classList.remove('mic-recording'); try{ recognition.stop(); }catch(e){} }
+
+    /* === ระบบออฟไลน์ === */
+    window.addEventListener('online', checkConnection);
+    window.addEventListener('offline', checkConnection);
+
+    function checkConnection() {
+      const banner = document.getElementById('offlineBanner');
+      if (navigator.onLine) { banner.classList.add('banner-hidden'); syncOfflineData(); } 
+      else { banner.classList.remove('banner-hidden'); updateOfflineCount(); }
+    }
+
+    function updateOfflineCount() {
+      let data = JSON.parse(localStorage.getItem('offlineRatings') || '[]');
+      document.getElementById('offlineCount').innerText = data.length > 0 ? ` (${data.length} รายการ)` : "";
+    }
+
+    function switchView(viewId) {
+      document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+      document.getElementById(viewId).classList.remove('hidden');
+    }
+
+    function hiddenAddStaff() {
+      loginTapCount++; clearTimeout(loginTapTimer);
+      if(loginTapCount >= 3) { loginTapCount = 0; switchView('addStaffView'); }
+      loginTapTimer = setTimeout(() => { loginTapCount = 0; }, 1500);
+    }
+
+    async function doLogin() {
+      if(!navigator.onLine) return alert("กรุณาเชื่อมต่ออินเทอร์เน็ต");
+      const id = document.getElementById('staffId').value;
+      const pass = document.getElementById('password').value;
+      if(!id || !pass) return;
+      
+      document.getElementById('loginStatus').innerText = "กำลังตรวจสอบ...";
+      try{ document.documentElement.requestFullscreen(); }catch(e){} 
+
+      const res = await apiCall('login', { staffId: id, password: pass });
+      
+      if(res.success) {
+        currentStaff = res;
+        document.getElementById('staffPhoto').src = res.photoUrl;
+        document.getElementById('staffNameDisplay').innerText = res.name;
+        switchView('ratingView');
+        document.getElementById('loginStatus').innerText = "";
+      } else {
+        document.getElementById('loginStatus').innerText = res.message;
+      }
+    }
+
+    async function sendRating(score) {
+      if(isRecording) stopMic();
+      const feedback = document.getElementById('feedbackInput').value;
+      switchView('thankyouView');
+      
+      if (navigator.onLine) {
+        const res = await apiCall('submitRating', { staffId: currentStaff.staffId, name: currentStaff.name, score: score, feedback: feedback });
+        if(!res.success) saveToLocalStorage(score, feedback);
+      } else {
+        saveToLocalStorage(score, feedback);
+      }
+      
+      document.getElementById('feedbackInput').value = "";
+      setTimeout(() => { switchView('ratingView'); }, 2500);
+    }
+
+    function saveToLocalStorage(score, feedback) {
+      let data = JSON.parse(localStorage.getItem('offlineRatings') || '[]');
+      data.push({ timestamp: new Date().toISOString(), staffId: currentStaff.staffId, name: currentStaff.name, score: score, feedback: feedback });
+      localStorage.setItem('offlineRatings', JSON.stringify(data));
+      checkConnection(); 
+    }
+
+    async function syncOfflineData() {
+      let data = JSON.parse(localStorage.getItem('offlineRatings') || '[]');
+      if (data.length > 0) {
+        const res = await apiCall('syncOfflineRatings', { offlineData: data });
+        if(res.success) {
+          localStorage.removeItem('offlineRatings');
+          document.getElementById('offlineCount').innerText = "";
+        }
+      }
+    }
+
+    function hiddenLogout() {
+      tapCount++; clearTimeout(tapTimer);
+      if(tapCount >= 5) {
+        tapCount = 0;
+        if(confirm('เปลี่ยนกะ ใช่หรือไม่?')) { currentStaff = {}; switchView('loginView'); try{document.exitFullscreen();}catch(e){} }
+      }
+      tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
+    }
+
+    async function submitNewStaff() {
+      const id = document.getElementById('newStaffId').value;
+      const pass = document.getElementById('newPassword').value;
+      const name = document.getElementById('newName').value;
+      const file = document.getElementById('newPhoto').files[0];
+      if(!id || !pass || !name) return;
+      
+      document.getElementById('addBtn').disabled = true;
+      document.getElementById('addStatus').innerText = "กำลังบันทึก...";
+      
+      if(file) {
+        const reader = new FileReader();
+        reader.onload = async function(e) { 
+          const res = await apiCall('addStaff', { staffId: id, password: pass, name: name, fileData: e.target.result, fileName: file.name });
+          onAddSuccess(res);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        const res = await apiCall('addStaff', { staffId: id, password: pass, name: name, fileData: "", fileName: "" });
+        onAddSuccess(res);
+      }
+    }
+
+    function onAddSuccess(res) {
+      document.getElementById('addBtn').disabled = false;
+      document.getElementById('addStatus').innerText = res.message;
+      if(res.success) { setTimeout(() => { switchView('loginView'); }, 1500); }
+    }
+  </script>
+</body>
+</html>
