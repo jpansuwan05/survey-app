@@ -12,7 +12,7 @@
       --bg-top: #003b73;
       --bg-bottom: #0074b7;
       
-      /* Rating Colors matching Image 1 */
+      /* Rating Colors */
       --c5: #10b981; --c5-light: #d1fae5;
       --c4: #3b82f6; --c4-light: #dbeafe;
       --c3: #f59e0b; --c3-light: #fef3c7;
@@ -22,7 +22,6 @@
 
     body { 
       font-family: 'Prompt', sans-serif; 
-      /* พื้นหลังโทนสีน้ำเงินสถานีรถไฟ */
       background: linear-gradient(160deg, var(--bg-top) 0%, var(--bg-bottom) 100%); 
       margin: 0; padding: 0; 
       display: flex; flex-direction: column; align-items: center; justify-content: center; 
@@ -30,23 +29,23 @@
       overflow: hidden; touch-action: manipulation; 
     }
     
-    /* Header Area (Logo & Profile) */
+    /* Header Area */
     .app-header {
       width: 90%; max-width: 440px;
       display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 15px; z-index: 2;
+      margin-bottom: 10px; z-index: 2;
     }
-    .header-logo { height: 60px; object-fit: contain; filter: brightness(0) invert(1); }
-    .profile-img { width: 75px; height: 75px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+    .header-logo { height: 50px; object-fit: contain; filter: brightness(0) invert(1); }
+    .profile-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 
-    /* Main White Card */
+    /* Main White Card (ปรับให้พอดีจอ) */
     .container { 
       background: #ffffff; 
       width: 92%; max-width: 440px; 
-      height: 85%; max-height: 800px; 
-      border-radius: 35px; 
+      height: 94%; max-height: 820px; 
+      border-radius: 30px; 
       box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
-      padding: 30px 20px; 
+      padding: 20px 15px; 
       box-sizing: border-box; 
       display: flex; flex-direction: column; 
       position: relative; z-index: 1;
@@ -55,147 +54,139 @@
     .hidden { display: none !important; }
     .view-center { justify-content: center; align-items: center; text-align: center; }
     
-    /* Staff Info (Top of Card - Style 2) */
-    .info-area { text-align: center; margin-bottom: 20px; }
-    .greeting-badge { display: inline-block; background: #eef4fb; color: var(--primary); padding: 5px 20px; border-radius: 20px; font-weight: 600; font-size: 15px; margin-bottom: 10px; }
-    .staff-name { font-size: 24px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
-    .instruction { font-size: 15px; color: #64748b; }
+    /* Staff Info */
+    .info-area { text-align: center; margin-bottom: 12px; }
+    .greeting-badge { display: inline-block; background: #eef4fb; color: var(--primary); padding: 4px 15px; border-radius: 20px; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .staff-name { font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+    .instruction { font-size: 14px; color: #64748b; }
     
-    /* Input & Mic Box (Style 2 - Capsule) */
+    /* Input & Mic Box (ไมค์อยู่ขวา) */
     .input-capsule { 
       display: flex; align-items: center; 
       background: #f1f5f9; border-radius: 50px; 
-      padding: 6px 15px 6px 6px; margin-bottom: 25px; 
+      padding: 5px 5px 5px 15px; margin-bottom: 15px; 
       box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
       border: 1px solid #e2e8f0;
     }
+    .feedback-input { 
+      flex: 1; border: none; font-size: 15px; font-family: 'Prompt', sans-serif; 
+      outline: none; background: transparent; padding: 0 10px 0 0; color: #1e293b; 
+    }
+    .feedback-input::placeholder { color: #94a3b8; }
     .mic-btn { 
       background: var(--primary); color: white; 
       border: none; border-radius: 50%; 
-      width: 50px; height: 50px; flex-shrink: 0;
+      width: 45px; height: 45px; flex-shrink: 0;
       cursor: pointer; display: flex; justify-content: center; align-items: center; 
       transition: all 0.2s; box-shadow: 0 4px 10px rgba(10, 88, 202, 0.3);
       -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; user-select: none;
     }
-    .mic-btn svg { width: 24px; height: 24px; stroke-width: 2px; pointer-events: none; }
+    .mic-btn svg { width: 22px; height: 22px; stroke-width: 2px; pointer-events: none; }
     .mic-recording { background: #ef4444 !important; transform: scale(1.1); box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); animation: pulse 1.5s infinite; }
-    .feedback-input { 
-      flex: 1; border: none; font-size: 15px; font-family: 'Prompt', sans-serif; 
-      outline: none; background: transparent; padding: 0 15px; color: #1e293b; 
-    }
-    .feedback-input::placeholder { color: #94a3b8; }
-    
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
-    /* Rating Cards (Style 1 - Gradients) */
-    .rating-list { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; overflow-y: auto; padding-bottom: 5px; }
+    /* Rating Cards (ปรับขนาดให้เล็กลงเล็กน้อย) */
+    .rating-list { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; overflow-y: auto; padding-bottom: 5px; }
     .rating-card { 
-      display: flex; align-items: center; min-height: 75px; 
-      border-radius: 20px; padding: 0 15px 0 10px; cursor: pointer; 
+      display: flex; align-items: center; min-height: 65px; 
+      border-radius: 18px; padding: 0 15px 0 10px; cursor: pointer; 
       transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); 
       -webkit-tap-highlight-color: transparent; 
     }
     .rating-card:active { transform: scale(0.97); }
     
-    .icon-circle { width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    .icon-circle svg { width: 35px; height: 35px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-circle { width: 48px; height: 48px; border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .icon-circle svg { width: 30px; height: 30px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     
-    .text-group { flex: 1; margin-left: 15px; }
-    .card-title { font-size: 20px; font-weight: 700; margin-bottom: -2px; }
-    .card-desc { font-size: 13px; font-weight: 400; opacity: 0.8; }
-    .arrow-icon { font-weight: 700; font-size: 20px; }
+    .text-group { flex: 1; margin-left: 12px; }
+    .card-title { font-size: 18px; font-weight: 700; margin-bottom: -2px; }
+    .card-desc { font-size: 12px; font-weight: 400; opacity: 0.8; }
+    .arrow-icon { font-weight: 700; font-size: 18px; }
 
-    /* Level 5 */
+    /* Level Colors */
     .level-5 { background: linear-gradient(90deg, var(--c5-light) 0%, #fff 80%); border: 1.5px solid var(--c5-light); }
     .level-5 .icon-circle { background: var(--c5); }
     .level-5 .card-title, .level-5 .card-desc { color: #065f46; }
     .level-5 .arrow-icon { color: var(--c5); }
-    /* Level 4 */
+    
     .level-4 { background: linear-gradient(90deg, var(--c4-light) 0%, #fff 80%); border: 1.5px solid var(--c4-light); }
     .level-4 .icon-circle { background: var(--c4); }
     .level-4 .card-title, .level-4 .card-desc { color: #1e3a8a; }
     .level-4 .arrow-icon { color: var(--c4); }
-    /* Level 3 */
+    
     .level-3 { background: linear-gradient(90deg, var(--c3-light) 0%, #fff 80%); border: 1.5px solid var(--c3-light); }
     .level-3 .icon-circle { background: var(--c3); }
     .level-3 .card-title, .level-3 .card-desc { color: #78350f; }
     .level-3 .arrow-icon { color: var(--c3); }
-    /* Level 2 */
+    
     .level-2 { background: linear-gradient(90deg, var(--c2-light) 0%, #fff 80%); border: 1.5px solid var(--c2-light); }
     .level-2 .icon-circle { background: var(--c2); }
     .level-2 .card-title, .level-2 .card-desc { color: #7c2d12; }
     .level-2 .arrow-icon { color: var(--c2); }
-    /* Level 1 */
+    
     .level-1 { background: linear-gradient(90deg, var(--c1-light) 0%, #fff 80%); border: 1.5px solid var(--c1-light); }
     .level-1 .icon-circle { background: var(--c1); }
     .level-1 .card-title, .level-1 .card-desc { color: #7f1d1d; }
     .level-1 .arrow-icon { color: var(--c1); }
 
     /* Footer */
-    .footer-text { text-align: center; color: var(--primary); font-weight: 600; font-size: 15px; margin-top: 15px; }
+    .footer-text { text-align: center; color: var(--primary); font-weight: 600; font-size: 14px; margin-top: 10px; }
 
     /* Forms */
-    .form-input { width: 100%; padding: 16px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 20px; font-size: 16px; font-family: 'Prompt', sans-serif; box-sizing: border-box; background: #f8fafc; }
+    .form-input { width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 20px; font-size: 15px; font-family: 'Prompt', sans-serif; box-sizing: border-box; background: #f8fafc; }
     .form-input:focus { border-color: var(--primary); background: #fff; outline: none; }
-    .btn { background-color: var(--primary); color: white; border: none; padding: 16px; font-size: 18px; border-radius: 20px; width: 100%; margin-top: 15px; font-weight: 600; font-family: 'Prompt', sans-serif; cursor: pointer; box-shadow: 0 4px 15px rgba(10, 88, 202, 0.3); }
+    .btn { background-color: var(--primary); color: white; border: none; padding: 14px; font-size: 16px; border-radius: 20px; width: 100%; margin-top: 12px; font-weight: 600; font-family: 'Prompt', sans-serif; cursor: pointer; box-shadow: 0 4px 15px rgba(10, 88, 202, 0.3); }
     
-    #offlineBanner { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--c1); color: white; padding: 12px; text-align: center; font-size: 14px; font-weight: 500; z-index: 9999; transition: transform 0.3s; }
+    #offlineBanner { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--c1); color: white; padding: 10px; text-align: center; font-size: 13px; font-weight: 500; z-index: 9999; transition: transform 0.3s; }
     .banner-hidden { transform: translateY(100%); }
   </style>
 </head>
 <body onload="checkConnection()">
 
-  <!-- Offline Banner -->
   <div id="offlineBanner" class="banner-hidden">
     🔴 ขาดการเชื่อมต่ออินเทอร์เน็ต (ระบบจะบันทึกชั่วคราว) <span id="offlineCount"></span>
   </div>
 
-  <!-- Login View -->
   <div id="loginView" class="container view-center">
-    <img id="orgLogoLogin" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" style="width: 160px; margin-bottom: 30px;" onclick="hiddenAddStaff()">
+    <img id="orgLogoLogin" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" style="width: 140px; margin-bottom: 25px;" onclick="hiddenAddStaff()">
     <h2 style="color: #1e293b; margin-top:0;">เข้าสู่ระบบเจ้าหน้าที่</h2>
     <input type="text" id="staffId" class="form-input" placeholder="รหัสพนักงาน" required>
     <input type="password" id="password" class="form-input" placeholder="รหัสผ่าน" required>
     <button type="button" class="btn" onclick="doLogin()">เข้าสู่ระบบ</button>
-    <p id="loginStatus" style="color:var(--c1); margin-top: 15px;"></p>
+    <p id="loginStatus" style="color:var(--c1); margin-top: 15px; font-size: 14px;"></p>
   </div>
 
-  <!-- Add Staff View -->
   <div id="addStaffView" class="container view-center hidden">
-    <h2 style="color: #1e293b;">เพิ่มพนักงานใหม่</h2>
+    <h2 style="color: #1e293b; margin-top: 0;">เพิ่มพนักงานใหม่</h2>
     <input type="text" id="newStaffId" class="form-input" placeholder="รหัสพนักงาน">
     <input type="text" id="newPassword" class="form-input" placeholder="รหัสผ่าน">
     <input type="text" id="newName" class="form-input" placeholder="ชื่อ - นามสกุล">
-    <input type="file" id="newPhoto" class="form-input" accept="image/*" style="padding:12px;">
+    <input type="file" id="newPhoto" class="form-input" accept="image/*" style="padding:10px;">
     <button type="button" class="btn" id="addBtn" onclick="submitNewStaff()">บันทึกข้อมูล</button>
     <button type="button" class="btn" style="background:#94a3b8; box-shadow:none;" onclick="switchView('loginView')">ยกเลิก</button>
-    <p id="addStatus" style="font-weight: 500; margin-top: 15px; color: var(--primary);"></p>
+    <p id="addStatus" style="font-weight: 500; margin-top: 15px; color: var(--primary); font-size: 14px;"></p>
   </div>
 
-  <!-- HEADER (Shows only on Rating View) -->
   <div id="ratingHeader" class="app-header hidden">
     <img id="orgLogo" class="header-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" onclick="hiddenLogout()">
     <img id="staffPhoto" class="profile-img" src="">
   </div>
 
-  <!-- Rating View -->
   <div id="ratingView" class="container hidden">
-    <!-- Staff Info (Top) -->
     <div class="info-area">
       <div class="greeting-badge">✨ สวัสดีค่ะ / ครับ ✨</div>
       <div id="staffNameDisplay" class="staff-name">ชื่อ-นามสกุล</div>
       <div class="instruction">กรุณาประเมินความพึงพอใจในการให้บริการ</div>
     </div>
     
-    <!-- Input Capsule (Style 2) -->
+    <!-- Input Capsule ย้ายไมค์ไปไว้ด้านขวา -->
     <div class="input-capsule">
+      <input type="text" id="feedbackInput" class="feedback-input" placeholder="พิมพ์ข้อความ หรือกดไมค์ค้างไว้เพื่อพูด...">
       <button class="mic-btn" id="micBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
       </button>
-      <input type="text" id="feedbackInput" class="feedback-input" placeholder="พิมพ์ข้อความ หรือกดไมค์ค้างไว้เพื่อพูด...">
     </div>
 
-    <!-- Rating List (Style 1) -->
     <div class="rating-list">
       <div class="rating-card level-5" onclick="sendRating(5)">
         <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><path d="M9 9l-1 -1 M15 9l1 -1"></path></svg></div>
@@ -226,16 +217,15 @@
     <div class="footer-text">💙 ขอบคุณที่ใช้บริการ 💙</div>
   </div>
 
-  <!-- Thank You View -->
   <div id="thankyouView" class="container hidden view-center">
-    <svg style="width:100px; height:100px; color:var(--c5); margin-bottom:20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-    <h2 style="color: var(--c5); margin-top:0; font-size:28px;">ขอบคุณสำหรับการประเมิน</h2>
-    <p style="color: #64748b; font-size:16px;">ความคิดเห็นของคุณช่วยให้เราพัฒนาบริการให้ดียิ่งขึ้น</p>
+    <svg style="width:90px; height:90px; color:var(--c5); margin-bottom:20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+    <h2 style="color: var(--c5); margin-top:0; font-size:26px;">ขอบคุณสำหรับการประเมิน</h2>
+    <p style="color: #64748b; font-size:15px;">ความคิดเห็นของคุณช่วยให้เราพัฒนาบริการให้ดียิ่งขึ้น</p>
   </div>
 
   <script>
     // =========================================================================
-    // ⚠️ สำคัญมาก: ใส่ลิงก์ Web App (ที่ลงท้ายด้วย /exec) ที่นี่!
+    // ⚠️ ใส่ลิงก์ Web App (ที่ลงท้ายด้วย /exec) ที่นี่!
     // =========================================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxglVnJg1ZvNaptUr1OOzEp5yohQkVl0Ztm6O0hRiBPbu83D2dkXiyS1lqyTZ0AbkdTrg/exec";
 
@@ -258,7 +248,6 @@
       }
     }
 
-    /* === ระบบไมโครโฟน (Push-to-Talk) === */
     let recognition;
     let isRecording = false;
     let finalTranscript = ''; 
@@ -313,7 +302,6 @@
     micBtn.addEventListener('mouseleave', stopMic);
     micBtn.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 
-    /* === ควบคุมหน้าจอ === */
     window.addEventListener('online', checkConnection);
     window.addEventListener('offline', checkConnection);
 
