@@ -132,28 +132,72 @@
       }
     }
 
-    /* === ระบบไมโครโฟน (ทำงาน 100% เมื่อแยกโฮสต์) === */
+  /* === ระบบไมโครโฟน (อัปเดตใหม่ Real-time & ลดการตัดเอง) === */
     let recognition;
     let isRecording = false;
+    let finalTranscript = ''; // ตัวแปรเก็บข้อความที่ประมวลผลเสร็จแล้ว
 
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRecognition();
-      recognition.lang = 'th-TH';
-      recognition.interimResults = false;
+      recognition.lang = 'th-TH'; // ภาษาไทย
       
-      recognition.onresult = function(event) {
-        document.getElementById('feedbackInput').value += (document.getElementById('feedbackInput').value ? " " : "") + event.results[0][0].transcript;
+      // อัปเดตใหม่ 2 จุดสำคัญ:
+      recognition.continuous = true; // ให้ฟังต่อเนื่อง ไม่ตัดไมค์เองเมื่อหยุดหายใจ
+      recognition.interimResults = true; // ให้แสดงข้อความแบบ Real-time ระหว่างพูด
+      
+      recognition.onstart = function() {
+        document.getElementById('feedbackInput').placeholder = "กำลังฟัง... พูดได้เลยครับ";
+        // เก็บข้อความเก่าที่อาจจะมีอยู่ก่อนหน้า
+        finalTranscript = document.getElementById('feedbackInput').value; 
+        if (finalTranscript.length > 0 && !finalTranscript.endsWith(' ')) {
+           finalTranscript += ' ';
+        }
       };
-      recognition.onend = stopMic;
-      recognition.onerror = stopMic;
+
+      recognition.onresult = function(event) {
+        let interimTranscript = '';
+        
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            // ถ้าคอมประมวลผลประโยคนี้ชัวร์แล้ว ให้เก็บถาวร
+            finalTranscript += event.results[i][0].transcript + ' ';
+          } else {
+            // ถ้ายึกยักกำลังประมวลผล ให้แสดงชั่วคราวไปก่อน
+            interimTranscript += event.results[i][0].transcript;
+          }
+        }
+        
+        // แสดงข้อความในกล่องแบบทันที
+        document.getElementById('feedbackInput').value = finalTranscript + interimTranscript;
+      };
+
+      recognition.onend = function() {
+        stopMic();
+      };
+      
+      recognition.onerror = function(event) {
+        console.log("Speech Error: ", event.error);
+        stopMic();
+      };
     } else {
       document.getElementById('micBtn').style.display = 'none';
     }
 
     function toggleMic() { isRecording ? stopMic() : startMic(); }
-    function startMic() { isRecording = true; document.getElementById('micBtn').classList.add('mic-recording'); try{ recognition.start(); }catch(e){} }
-    function stopMic() { isRecording = false; document.getElementById('micBtn').classList.remove('mic-recording'); try{ recognition.stop(); }catch(e){} }
+    
+    function startMic() { 
+      isRecording = true; 
+      document.getElementById('micBtn').classList.add('mic-recording'); 
+      try { recognition.start(); } catch(e) {} 
+    }
+    
+    function stopMic() { 
+      isRecording = false; 
+      document.getElementById('micBtn').classList.remove('mic-recording'); 
+      document.getElementById('feedbackInput').placeholder = "พิมพ์ข้อความ หรือแตะไมค์เพื่อพูด...";
+      try { recognition.stop(); } catch(e) {} 
+    }
 
     /* === ระบบออฟไลน์ === */
     window.addEventListener('online', checkConnection);
