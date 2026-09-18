@@ -12,7 +12,6 @@
       --bg-top: #003b73;
       --bg-bottom: #0074b7;
       
-      /* Rating Colors */
       --c5: #10b981; --c5-light: #d1fae5;
       --c4: #3b82f6; --c4-light: #dbeafe;
       --c3: #f59e0b; --c3-light: #fef3c7;
@@ -29,7 +28,6 @@
       overflow: hidden; touch-action: manipulation; 
     }
     
-    /* Header Area (โลโก้ & รูปโปรไฟล์) */
     .app-header {
       width: 90%; max-width: 440px;
       display: flex; justify-content: space-between; align-items: center;
@@ -38,7 +36,6 @@
     }
     .header-logo { height: 50px; object-fit: contain; filter: brightness(0) invert(1); }
     
-    /* รูปโปรไฟล์ขยายใหญ่และซ้อนการ์ด */
     .profile-img { 
       width: 95px; height: 95px; 
       border-radius: 50%; object-fit: cover; 
@@ -48,7 +45,6 @@
       transform: translateY(30px); 
     }
 
-    /* Main White Card */
     .container { 
       background: #ffffff; 
       width: 92%; max-width: 440px; 
@@ -65,13 +61,11 @@
     .hidden { display: none !important; }
     .view-center { justify-content: center; align-items: center; text-align: center; }
     
-    /* Staff Info */
     .info-area { text-align: center; margin-bottom: 12px; }
     .greeting-badge { display: inline-block; background: #eef4fb; color: var(--primary); padding: 4px 15px; border-radius: 20px; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
     .staff-name { font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
     .instruction { font-size: 14px; color: #64748b; }
     
-    /* Input & Mic Box */
     .input-capsule { 
       display: flex; align-items: center; 
       background: #f1f5f9; border-radius: 50px; 
@@ -96,7 +90,6 @@
     .mic-recording { background: #ef4444 !important; transform: scale(1.1); box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); animation: pulse 1.5s infinite; }
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
-    /* Rating Cards */
     .rating-list { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; overflow-y: auto; padding-bottom: 5px; }
     .rating-card { 
       display: flex; align-items: center; min-height: 65px; 
@@ -114,7 +107,6 @@
     .card-desc { font-size: 12px; font-weight: 400; opacity: 0.8; }
     .arrow-icon { font-weight: 700; font-size: 18px; }
 
-    /* Level Colors */
     .level-5 { background: linear-gradient(90deg, var(--c5-light) 0%, #fff 80%); border: 1.5px solid var(--c5-light); }
     .level-5 .icon-circle { background: var(--c5); }
     .level-5 .card-title, .level-5 .card-desc { color: #065f46; }
@@ -140,10 +132,8 @@
     .level-1 .card-title, .level-1 .card-desc { color: #7f1d1d; }
     .level-1 .arrow-icon { color: var(--c1); }
 
-    /* Footer */
     .footer-text { text-align: center; color: var(--primary); font-weight: 600; font-size: 14px; margin-top: 10px; }
 
-    /* Forms */
     .form-input { width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 20px; font-size: 15px; font-family: 'Prompt', sans-serif; box-sizing: border-box; background: #f8fafc; }
     .form-input:focus { border-color: var(--primary); background: #fff; outline: none; }
     .btn { background-color: var(--primary); color: white; border: none; padding: 14px; font-size: 16px; border-radius: 20px; width: 100%; margin-top: 12px; font-weight: 600; font-family: 'Prompt', sans-serif; cursor: pointer; box-shadow: 0 4px 15px rgba(10, 88, 202, 0.3); }
@@ -158,7 +148,6 @@
     🔴 ขาดการเชื่อมต่ออินเทอร์เน็ต (ระบบจะบันทึกชั่วคราว) <span id="offlineCount"></span>
   </div>
 
-  <!-- หน้า Login -->
   <div id="loginView" class="container view-center">
     <img id="orgLogoLogin" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" style="width: 140px; margin-bottom: 25px;" onclick="hiddenAddStaff()">
     <h2 style="color: #1e293b; margin-top:0;">เข้าสู่ระบบเจ้าหน้าที่</h2>
@@ -168,7 +157,6 @@
     <p id="loginStatus" style="color:var(--c1); margin-top: 15px; font-size: 14px;"></p>
   </div>
 
-  <!-- หน้าเพิ่มพนักงาน -->
   <div id="addStaffView" class="container view-center hidden">
     <h2 style="color: #1e293b; margin-top: 0;">เพิ่มพนักงานใหม่</h2>
     <input type="text" id="newStaffId" class="form-input" placeholder="รหัสพนักงาน">
@@ -180,13 +168,11 @@
     <p id="addStatus" style="font-weight: 500; margin-top: 15px; color: var(--primary); font-size: 14px;"></p>
   </div>
 
-  <!-- HEADER โลโก้และรูปโปรไฟล์ที่ลอยอยู่ด้านบน -->
   <div id="ratingHeader" class="app-header hidden">
     <img id="orgLogo" class="header-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" onclick="hiddenLogout()">
     <img id="staffPhoto" class="profile-img" src="">
   </div>
 
-  <!-- หน้าให้คะแนนประเมิน -->
   <div id="ratingView" class="container hidden">
     <div class="info-area">
       <div class="greeting-badge">✨ สวัสดีค่ะ / ครับ ✨</div>
@@ -231,7 +217,6 @@
     <div class="footer-text">💙 ขอบคุณที่ใช้บริการ 💙</div>
   </div>
 
-  <!-- หน้าขอบคุณ -->
   <div id="thankyouView" class="container hidden view-center">
     <svg style="width:90px; height:90px; color:var(--c5); margin-bottom:20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
     <h2 style="color: var(--c5); margin-top:0; font-size:26px;">ขอบคุณสำหรับการประเมิน</h2>
@@ -239,9 +224,6 @@
   </div>
 
   <script>
-    // =========================================================================
-    // ⚠️ ลิงก์ Web App ใส่ไว้ให้เรียบร้อยแล้วครับ!
-    // =========================================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygVT1PEqbRBntvZDEcKeX2ZDTXIm-WEROndkkAbt2UMydMip92mfFUEuxdDDmqf614KA/exec";
 
     let currentStaff = {};
@@ -277,6 +259,7 @@
       
       recognition.onstart = function() {
         document.getElementById('feedbackInput').placeholder = "กำลังฟัง... พูดได้เลยครับ";
+        // ดึงข้อความปัจจุบันมาพักไว้ เผื่อลูกค้าอยากพูดต่อจากที่พิมพ์ไว้
         finalTranscript = document.getElementById('feedbackInput').value; 
       };
 
@@ -299,12 +282,19 @@
 
     function startMic() { 
       if (isRecording) return;
-      isRecording = true; micBtn.classList.add('mic-recording'); 
+      isRecording = true; 
+      micBtn.classList.add('mic-recording'); 
+      
+      // ล้างข้อความเก่าทิ้งทุกครั้งที่กดพูดใหม่ (เพื่อไม่ให้จำคำเก่ามาซ้อน)
+      finalTranscript = ''; 
+      document.getElementById('feedbackInput').value = '';
+      
       try { recognition.start(); } catch(e) {} 
     }
     function stopMic() { 
       if (!isRecording) return;
-      isRecording = false; micBtn.classList.remove('mic-recording'); 
+      isRecording = false; 
+      micBtn.classList.remove('mic-recording'); 
       document.getElementById('feedbackInput').placeholder = "พิมพ์ข้อความ หรือกดไมค์ค้างไว้เพื่อพูด..."; 
       try { recognition.stop(); } catch(e) {} 
     }
