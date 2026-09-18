@@ -13,9 +13,9 @@
     .view-center { justify-content: center; align-items: center; text-align: center; }
     
     .header-area { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; width: 100%; }
-    .org-logo { max-width: 140px; max-height: 80px; object-fit: contain; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .login-logo { width: 180px; max-width: 90%; margin-bottom: 25px; cursor: pointer; }
-    .profile-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #0066ff; }
+    .org-logo { max-width: 160px; max-height: 95px; object-fit: contain; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .login-logo { width: 180px; max-width: 90%; margin-bottom: 25px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .profile-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #0066ff; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
     
     .info-area { text-align: center; margin-bottom: 10px; }
     .staff-name { font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 2px; }
@@ -24,7 +24,8 @@
     /* กล่องข้อเสนอแนะและปุ่มไมค์ */
     .feedback-box { display: flex; align-items: center; background: #fff; border: 2px solid #eef2f6; border-radius: 12px; padding: 5px; margin-bottom: 10px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
     .feedback-input { flex: 1; border: none; font-size: 15px; font-family: 'Prompt', sans-serif; outline: none; background: transparent; padding: 10px; color: #333; }
-    .mic-btn { font-size: 22px; background: #f0f4f8; border: none; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; }
+    .feedback-input::placeholder { color: #aaa; }
+    .mic-btn { font-size: 22px; background: #f0f4f8; border: none; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; -webkit-tap-highlight-color: transparent; }
     .mic-recording { background: #ff4757; color: white; animation: pulse 1s infinite; }
     @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
     
@@ -46,11 +47,12 @@
 </head>
 <body onload="checkConnection()">
 
+  <!-- แจ้งเตือนเน็ตหลุด -->
   <div id="offlineBanner" class="banner-hidden">
-    🔴 ออฟไลน์ (ข้อมูลจะถูกบันทึกชั่วคราว) <span id="offlineCount"></span>
+    🔴 ขาดการเชื่อมต่ออินเทอร์เน็ต (ข้อมูลจะถูกบันทึกชั่วคราว) <span id="offlineCount"></span>
   </div>
 
-  <!-- Login -->
+  <!-- หน้า Login (ซ่อนปุ่มเพิ่มพนักงานที่โลโก้ แตะ 3 ครั้ง) -->
   <div id="loginView" class="container view-center">
     <img id="orgLogoLogin" class="login-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" onclick="hiddenAddStaff()">
     <h2 style="color: #2c3e50; margin-top:0;">เข้าสู่ระบบเจ้าหน้าที่</h2>
@@ -60,7 +62,7 @@
     <p id="loginStatus" style="color:#e74c3c; margin-top: 15px;"></p>
   </div>
 
-  <!-- Add Staff -->
+  <!-- หน้าเพิ่มพนักงาน -->
   <div id="addStaffView" class="container view-center hidden">
     <h2 style="color: #2c3e50; margin-top:0;">เพิ่มพนักงานใหม่</h2>
     <input type="text" id="newStaffId" placeholder="รหัสพนักงาน" required>
@@ -72,9 +74,10 @@
     <p id="addStatus" style="font-weight: 500; margin-top: 15px;"></p>
   </div>
 
-  <!-- Rating View -->
+  <!-- หน้าประเมิน Kiosk -->
   <div id="ratingView" class="container hidden">
     <div class="header-area">
+      <!-- ซ่อนปุ่มเปลี่ยนกะที่โลโก้ แตะ 5 ครั้ง -->
       <img id="orgLogo" class="org-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" onclick="hiddenLogout()">
       <img id="staffPhoto" class="profile-img" id="staffPhotoDisplay">
     </div>
@@ -83,6 +86,7 @@
       <div class="instruction">กรุณาประเมินความพึงพอใจในการให้บริการ</div>
     </div>
     
+    <!-- กล่องเสียง Real-time -->
     <div class="feedback-box">
       <input type="text" id="feedbackInput" class="feedback-input" placeholder="พิมพ์ข้อความ หรือแตะไมค์เพื่อพูด...">
       <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎤</button>
@@ -97,7 +101,7 @@
     </div>
   </div>
 
-  <!-- Thank You -->
+  <!-- หน้าขอบคุณ -->
   <div id="thankyouView" class="container hidden view-center">
     <div class="icon-thankyou">🙏</div>
     <h2 style="color: #0066ff;">ขอบคุณสำหรับการประเมิน</h2>
@@ -105,7 +109,7 @@
 
   <script>
     // ==========================================
-    // ใส่ลิงก์ Web App จาก Apps Script ที่นี่ !!!
+    // ใส่ลิงก์ Web App (ที่ลงท้ายด้วย /exec) ที่นี่
     // ==========================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZLRzk7lntw9h_WSk9qIQLPPri9_urh9wZRWrmGDBYjvj9jUKujFPTXP5bLFGpUV45Zg/exec";
 
@@ -113,93 +117,64 @@
     let tapCount = 0, tapTimer;
     let loginTapCount = 0, loginTapTimer;
 
-   // ฟังก์ชันเชื่อมต่อกับ Apps Script (อัปเดตแก้บล็อกความปลอดภัย)
+    // ฟังก์ชันเชื่อมต่อกับ Apps Script (แก้ CORS ทะลุบล็อก)
     async function apiCall(action, payload) {
       payload.action = action;
       try {
         const response = await fetch(SCRIPT_URL, { 
           method: 'POST',
-          redirect: 'follow', // จำเป็นสำหรับ Google Apps Script
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8", // หลอกเบราว์เซอร์ว่าส่งข้อความธรรมดา เพื่อทะลุบล็อก
-          },
+          redirect: 'follow', 
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload) 
         });
         return await response.json();
       } catch (error) {
-        console.error(error); // พิมพ์ Error ลงคอนโซลเผื่อไว้เช็ก
-        return { success: false, message: "เชื่อมต่อขัดข้อง กรุณาเช็กเน็ต หรือลิงก์ Apps Script" };
+        console.error(error);
+        return { success: false, message: "เชื่อมต่อขัดข้อง กรุณาเช็กอินเทอร์เน็ต" };
       }
     }
 
-  /* === ระบบไมโครโฟน (อัปเดตใหม่ Real-time & ลดการตัดเอง) === */
+    /* === ระบบไมโครโฟน Real-time === */
     let recognition;
     let isRecording = false;
-    let finalTranscript = ''; // ตัวแปรเก็บข้อความที่ประมวลผลเสร็จแล้ว
+    let finalTranscript = ''; 
 
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRecognition();
-      recognition.lang = 'th-TH'; // ภาษาไทย
-      
-      // อัปเดตใหม่ 2 จุดสำคัญ:
-      recognition.continuous = true; // ให้ฟังต่อเนื่อง ไม่ตัดไมค์เองเมื่อหยุดหายใจ
-      recognition.interimResults = true; // ให้แสดงข้อความแบบ Real-time ระหว่างพูด
+      recognition.lang = 'th-TH';
+      recognition.continuous = true; 
+      recognition.interimResults = true; 
       
       recognition.onstart = function() {
         document.getElementById('feedbackInput').placeholder = "กำลังฟัง... พูดได้เลยครับ";
-        // เก็บข้อความเก่าที่อาจจะมีอยู่ก่อนหน้า
         finalTranscript = document.getElementById('feedbackInput').value; 
-        if (finalTranscript.length > 0 && !finalTranscript.endsWith(' ')) {
-           finalTranscript += ' ';
-        }
+        if (finalTranscript.length > 0 && !finalTranscript.endsWith(' ')) { finalTranscript += ' '; }
       };
 
       recognition.onresult = function(event) {
         let interimTranscript = '';
-        
         for (let i = event.resultIndex; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
-            // ถ้าคอมประมวลผลประโยคนี้ชัวร์แล้ว ให้เก็บถาวร
             finalTranscript += event.results[i][0].transcript + ' ';
           } else {
-            // ถ้ายึกยักกำลังประมวลผล ให้แสดงชั่วคราวไปก่อน
             interimTranscript += event.results[i][0].transcript;
           }
         }
-        
-        // แสดงข้อความในกล่องแบบทันที
         document.getElementById('feedbackInput').value = finalTranscript + interimTranscript;
       };
 
-      recognition.onend = function() {
-        stopMic();
-      };
-      
-      recognition.onerror = function(event) {
-        console.log("Speech Error: ", event.error);
-        stopMic();
-      };
+      recognition.onend = stopMic;
+      recognition.onerror = function(event) { stopMic(); console.log(event.error); };
     } else {
       document.getElementById('micBtn').style.display = 'none';
     }
 
     function toggleMic() { isRecording ? stopMic() : startMic(); }
-    
-    function startMic() { 
-      isRecording = true; 
-      document.getElementById('micBtn').classList.add('mic-recording'); 
-      try { recognition.start(); } catch(e) {} 
-    }
-    
-    function stopMic() { 
-      isRecording = false; 
-      document.getElementById('micBtn').classList.remove('mic-recording'); 
-      document.getElementById('feedbackInput').placeholder = "พิมพ์ข้อความ หรือแตะไมค์เพื่อพูด...";
-      try { recognition.stop(); } catch(e) {} 
-    }
+    function startMic() { isRecording = true; document.getElementById('micBtn').classList.add('mic-recording'); try{ recognition.start(); }catch(e){} }
+    function stopMic() { isRecording = false; document.getElementById('micBtn').classList.remove('mic-recording'); document.getElementById('feedbackInput').placeholder = "พิมพ์ข้อความ หรือแตะไมค์เพื่อพูด..."; try{ recognition.stop(); }catch(e){} }
 
-    /* === ระบบออฟไลน์ === */
+    /* === ระบบออฟไลน์และจัดการหน้าจอ === */
     window.addEventListener('online', checkConnection);
     window.addEventListener('offline', checkConnection);
 
@@ -242,6 +217,7 @@
         document.getElementById('staffNameDisplay').innerText = res.name;
         switchView('ratingView');
         document.getElementById('loginStatus').innerText = "";
+        document.getElementById('staffId').value = ""; document.getElementById('password').value = "";
       } else {
         document.getElementById('loginStatus').innerText = res.message;
       }
@@ -285,7 +261,7 @@
       tapCount++; clearTimeout(tapTimer);
       if(tapCount >= 5) {
         tapCount = 0;
-        if(confirm('เปลี่ยนกะ ใช่หรือไม่?')) { currentStaff = {}; switchView('loginView'); try{document.exitFullscreen();}catch(e){} }
+        if(confirm('ต้องการปิดหน้าต่าง / เปลี่ยนกะ ใช่หรือไม่?')) { currentStaff = {}; switchView('loginView'); try{document.exitFullscreen();}catch(e){} }
       }
       tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
     }
@@ -298,7 +274,7 @@
       if(!id || !pass || !name) return;
       
       document.getElementById('addBtn').disabled = true;
-      document.getElementById('addStatus').innerText = "กำลังบันทึก...";
+      document.getElementById('addStatus').innerText = "กำลังบันทึกข้อมูล (ใช้เวลาสักครู่)...";
       
       if(file) {
         const reader = new FileReader();
@@ -316,7 +292,14 @@
     function onAddSuccess(res) {
       document.getElementById('addBtn').disabled = false;
       document.getElementById('addStatus').innerText = res.message;
-      if(res.success) { setTimeout(() => { switchView('loginView'); }, 1500); }
+      if(res.success) { 
+        setTimeout(() => { 
+          document.getElementById('newStaffId').value = ""; document.getElementById('newPassword').value = ""; 
+          document.getElementById('newName').value = ""; document.getElementById('newPhoto').value = "";
+          document.getElementById('addStatus').innerText = "";
+          switchView('loginView'); 
+        }, 1500); 
+      }
     }
   </script>
 </body>
