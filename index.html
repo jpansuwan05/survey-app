@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
@@ -7,104 +7,209 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Prompt', sans-serif; background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; height: 100dvh; overflow: hidden; touch-action: manipulation; }
-    .container { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); width: 92%; max-width: 420px; height: 96%; max-height: 900px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 15px; box-sizing: border-box; display: flex; flex-direction: column; overflow-y: auto; }
+    :root {
+      --primary: #0056d2;
+      --bg-gradient-1: #f0f4f8;
+      --bg-gradient-2: #d9e2ec;
+      --card-bg: rgba(255, 255, 255, 0.98);
+      --text-main: #102a43;
+      --text-sub: #627d98;
+      --border-color: #bcccdc;
+      
+      /* Rating Colors */
+      --color-5: #209958; /* พอใจมาก */
+      --color-4: #0066ff; /* พอใจ */
+      --color-3: #f59e0b; /* ปานกลาง */
+      --color-2: #f97316; /* ไม่พอใจ */
+      --color-1: #ef4444; /* ไม่พอใจมาก */
+    }
+
+    body { 
+      font-family: 'Prompt', sans-serif; 
+      background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%); 
+      margin: 0; padding: 0; 
+      display: flex; flex-direction: column; align-items: center; justify-content: center; 
+      height: 100vh; height: 100dvh; 
+      overflow: hidden; touch-action: manipulation; 
+    }
+    
+    .container { 
+      background: var(--card-bg); 
+      backdrop-filter: blur(12px); 
+      width: 92%; max-width: 440px; 
+      height: 96%; max-height: 850px; 
+      border-radius: 24px; 
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05); 
+      padding: 25px 20px; 
+      box-sizing: border-box; 
+      display: flex; flex-direction: column; 
+    }
+    
     .hidden { display: none !important; }
     .view-center { justify-content: center; align-items: center; text-align: center; }
     
-    .header-area { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; width: 100%; }
-    .org-logo { max-width: 160px; max-height: 95px; object-fit: contain; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .login-logo { width: 180px; max-width: 90%; margin-bottom: 25px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .profile-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #0066ff; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+    /* Header & Profile */
+    .header-area { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; width: 100%; }
+    .org-logo { max-width: 130px; max-height: 70px; object-fit: contain; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .login-logo { width: 160px; max-width: 90%; margin-bottom: 30px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .profile-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     
-    .info-area { text-align: center; margin-bottom: 10px; }
-    .staff-name { font-size: 20px; font-weight: 600; color: #2c3e50; margin-bottom: 2px; }
-    .instruction { font-size: 13px; color: #7f8c8d; }
+    .info-area { text-align: center; margin-bottom: 15px; }
+    .staff-name { font-size: 22px; font-weight: 600; color: var(--text-main); margin-bottom: 2px; }
+    .instruction { font-size: 14px; color: var(--text-sub); }
     
-    /* กล่องข้อเสนอแนะและปุ่มไมค์ */
-    .feedback-box { display: flex; align-items: center; background: #fff; border: 2px solid #eef2f6; border-radius: 12px; padding: 5px; margin-bottom: 10px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-    .feedback-input { flex: 1; border: none; font-size: 15px; font-family: 'Prompt', sans-serif; outline: none; background: transparent; padding: 10px; color: #333; }
-    .feedback-input::placeholder { color: #aaa; }
-    .mic-btn { font-size: 22px; background: #f0f4f8; border: none; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center; -webkit-tap-highlight-color: transparent; }
-    .mic-recording { background: #ff4757; color: white; animation: pulse 1s infinite; }
-    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    /* Input & Mic Box (Modern Style) */
+    .feedback-wrapper { position: relative; margin-bottom: 20px; width: 100%; }
+    .feedback-input { 
+      width: 100%; padding: 16px 60px 16px 20px; 
+      border: 2px solid #e1e8ef; border-radius: 20px; 
+      font-size: 15px; font-family: 'Prompt', sans-serif; 
+      outline: none; background: #f8fafc; color: var(--text-main); 
+      box-sizing: border-box; transition: all 0.3s;
+    }
+    .feedback-input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(0, 86, 210, 0.1); }
+    .feedback-input::placeholder { color: #9fb3c8; }
     
-    .rating-list { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; padding-bottom: 5px; }
-    .rating-card { flex: 1; max-height: 65px; display: flex; align-items: center; background: #ffffff; border: 2px solid #f0f3f6; border-radius: 14px; padding: 0 15px; cursor: pointer; transition: all 0.1s; -webkit-tap-highlight-color: transparent; }
-    .rating-card:active { transform: scale(0.97); border-color: #0066ff; background: #f0f7ff; }
-    .rating-emoji { font-size: 34px; margin-right: 15px; }
-    .rating-label { font-size: 16px; font-weight: 500; color: #34495e; }
+    .mic-btn { 
+      position: absolute; right: 8px; top: 8px; 
+      background: var(--primary); color: white; 
+      border: none; border-radius: 14px; 
+      width: 42px; height: 42px; 
+      cursor: pointer; display: flex; justify-content: center; align-items: center; 
+      transition: all 0.2s; -webkit-tap-highlight-color: transparent; 
+    }
+    .mic-btn svg { width: 20px; height: 20px; stroke-width: 2.5px; }
+    .mic-btn:active { transform: scale(0.92); }
+    .mic-recording { background: #ef4444 !important; animation: pulse 1.2s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); } 70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
     
-    input { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #eef2f6; border-radius: 12px; font-size: 16px; font-family: 'Prompt', sans-serif; box-sizing: border-box; }
-    input[type="file"] { padding: 10px; font-size: 14px; background: #f9f9f9; border: 2px dashed #ccc; }
-    .btn { background-color: #0066ff; color: white; border: none; padding: 15px; font-size: 18px; border-radius: 12px; width: 100%; margin-top: 10px; font-weight: 600; font-family: 'Prompt', sans-serif; cursor: pointer; }
-    .btn-secondary { background-color: #95a5a6; }
-    .icon-thankyou { font-size: 80px; margin: 0; }
+    /* Rating Cards */
+    .rating-list { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; }
+    .rating-card { 
+      flex: 1; min-height: 65px; display: flex; align-items: center; 
+      background: #fff; border: 2px solid #e1e8ef; border-radius: 18px; 
+      padding: 0 20px; cursor: pointer; transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); 
+      -webkit-tap-highlight-color: transparent; 
+    }
+    .rating-card:active { transform: scale(0.96); }
     
-    #offlineBanner { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #e74c3c; color: white; padding: 12px; text-align: center; font-size: 14px; z-index: 9999; transition: transform 0.3s; }
+    .rating-card.level-5 { color: var(--color-5); }
+    .rating-card.level-5:active { border-color: var(--color-5); background: #f0fdf4; }
+    .rating-card.level-4 { color: var(--color-4); }
+    .rating-card.level-4:active { border-color: var(--color-4); background: #eff6ff; }
+    .rating-card.level-3 { color: var(--color-3); }
+    .rating-card.level-3:active { border-color: var(--color-3); background: #fffbeb; }
+    .rating-card.level-2 { color: var(--color-2); }
+    .rating-card.level-2:active { border-color: var(--color-2); background: #fff7ed; }
+    .rating-card.level-1 { color: var(--color-1); }
+    .rating-card.level-1:active { border-color: var(--color-1); background: #fef2f2; }
+
+    .rating-icon { width: 36px; height: 36px; margin-right: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .rating-label { font-size: 17px; font-weight: 500; color: var(--text-main); }
+
+    /* Forms & Buttons */
+    .form-input { width: 100%; padding: 16px; margin: 8px 0; border: 2px solid #e1e8ef; border-radius: 16px; font-size: 16px; font-family: 'Prompt', sans-serif; box-sizing: border-box; background: #f8fafc; transition: 0.3s; }
+    .form-input:focus { border-color: var(--primary); background: #fff; outline: none; }
+    input[type="file"].form-input { padding: 12px; font-size: 14px; background: #fff; border: 2px dashed #bcccdc; }
+    
+    .btn { background-color: var(--primary); color: white; border: none; padding: 16px; font-size: 18px; border-radius: 16px; width: 100%; margin-top: 15px; font-weight: 600; font-family: 'Prompt', sans-serif; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0, 86, 210, 0.2); }
+    .btn:active { transform: translateY(2px); box-shadow: 0 2px 6px rgba(0, 86, 210, 0.2); }
+    .btn-secondary { background-color: #94a3b8; box-shadow: 0 4px 12px rgba(148, 163, 184, 0.2); }
+    
+    .icon-thankyou { display: flex; justify-content: center; margin-bottom: 20px; color: var(--color-5); }
+    .icon-thankyou svg { width: 80px; height: 80px; stroke-width: 1.5; }
+    
+    #offlineBanner { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--color-1); color: white; padding: 12px; text-align: center; font-size: 14px; font-weight: 500; z-index: 9999; transition: transform 0.3s; }
     .banner-hidden { transform: translateY(100%); }
   </style>
 </head>
 <body onload="checkConnection()">
 
-  <!-- แจ้งเตือนเน็ตหลุด -->
+  <!-- Offline Banner -->
   <div id="offlineBanner" class="banner-hidden">
-    🔴 ขาดการเชื่อมต่ออินเทอร์เน็ต (ข้อมูลจะถูกบันทึกชั่วคราว) <span id="offlineCount"></span>
+    <svg style="width:16px; height:16px; vertical-align:middle; margin-right:5px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a15.16 15.16 0 0 1-2.46 3.7M2.43 2.43l19.14 19.14M2 12s3-7 10-7M5.64 5.64A15.16 15.16 0 0 0 2 12s3 7 10 7a10.43 10.43 0 0 0 5.27-1.38"></path></svg>
+    ขาดการเชื่อมต่ออินเทอร์เน็ต (ระบบจะบันทึกชั่วคราว) <span id="offlineCount"></span>
   </div>
 
-  <!-- หน้า Login (ซ่อนปุ่มเพิ่มพนักงานที่โลโก้ แตะ 3 ครั้ง) -->
+  <!-- Login View -->
   <div id="loginView" class="container view-center">
     <img id="orgLogoLogin" class="login-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" onclick="hiddenAddStaff()">
-    <h2 style="color: #2c3e50; margin-top:0;">เข้าสู่ระบบเจ้าหน้าที่</h2>
-    <input type="text" id="staffId" placeholder="รหัสพนักงาน" required>
-    <input type="password" id="password" placeholder="รหัสผ่าน" required>
+    <h2 style="color: var(--text-main); margin-top:0;">เข้าสู่ระบบเจ้าหน้าที่</h2>
+    <input type="text" id="staffId" class="form-input" placeholder="รหัสพนักงาน" required>
+    <input type="password" id="password" class="form-input" placeholder="รหัสผ่าน" required>
     <button type="button" class="btn" onclick="doLogin()">เข้าสู่ระบบ</button>
-    <p id="loginStatus" style="color:#e74c3c; margin-top: 15px;"></p>
+    <p id="loginStatus" style="color:var(--color-1); margin-top: 15px;"></p>
   </div>
 
-  <!-- หน้าเพิ่มพนักงาน -->
+  <!-- Add Staff View -->
   <div id="addStaffView" class="container view-center hidden">
-    <h2 style="color: #2c3e50; margin-top:0;">เพิ่มพนักงานใหม่</h2>
-    <input type="text" id="newStaffId" placeholder="รหัสพนักงาน" required>
-    <input type="text" id="newPassword" placeholder="รหัสผ่าน" required>
-    <input type="text" id="newName" placeholder="ชื่อ - นามสกุล" required>
-    <input type="file" id="newPhoto" accept="image/*">
-    <button type="button" class="btn" id="addBtn" onclick="submitNewStaff()">💾 บันทึกข้อมูล</button>
+    <h2 style="color: var(--text-main); margin-top:0;">เพิ่มพนักงานใหม่</h2>
+    <input type="text" id="newStaffId" class="form-input" placeholder="รหัสพนักงาน" required>
+    <input type="text" id="newPassword" class="form-input" placeholder="รหัสผ่าน" required>
+    <input type="text" id="newName" class="form-input" placeholder="ชื่อ - นามสกุล" required>
+    <input type="file" id="newPhoto" class="form-input" accept="image/*">
+    <button type="button" class="btn" id="addBtn" onclick="submitNewStaff()">บันทึกข้อมูล</button>
     <button type="button" class="btn btn-secondary" onclick="switchView('loginView')">ยกเลิก</button>
-    <p id="addStatus" style="font-weight: 500; margin-top: 15px;"></p>
+    <p id="addStatus" style="font-weight: 500; margin-top: 15px; color: var(--primary);"></p>
   </div>
 
-  <!-- หน้าประเมิน Kiosk -->
+  <!-- Rating View -->
   <div id="ratingView" class="container hidden">
     <div class="header-area">
-      <!-- ซ่อนปุ่มเปลี่ยนกะที่โลโก้ แตะ 5 ครั้ง -->
       <img id="orgLogo" class="org-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" onclick="hiddenLogout()">
       <img id="staffPhoto" class="profile-img" id="staffPhotoDisplay">
     </div>
+    
     <div class="info-area">
       <div id="staffNameDisplay" class="staff-name">ชื่อ-นามสกุล</div>
       <div class="instruction">กรุณาประเมินความพึงพอใจในการให้บริการ</div>
     </div>
     
-    <!-- กล่องเสียง Real-time -->
-    <div class="feedback-box">
+    <!-- Modern Input + Mic Button -->
+    <div class="feedback-wrapper">
       <input type="text" id="feedbackInput" class="feedback-input" placeholder="พิมพ์ข้อความ หรือแตะไมค์เพื่อพูด...">
-      <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎤</button>
+      <button class="mic-btn" id="micBtn" onclick="toggleMic()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
+      </button>
     </div>
 
+    <!-- Rating List with Custom SVGs -->
     <div class="rating-list">
-      <div class="rating-card" onclick="sendRating(5)"><div class="rating-emoji">😍</div><div class="rating-label">พอใจมาก</div></div>
-      <div class="rating-card" onclick="sendRating(4)"><div class="rating-emoji">🙂</div><div class="rating-label">พอใจ</div></div>
-      <div class="rating-card" onclick="sendRating(3)"><div class="rating-emoji">😐</div><div class="rating-label">ปานกลาง</div></div>
-      <div class="rating-card" onclick="sendRating(2)"><div class="rating-emoji">😟</div><div class="rating-label">ไม่พอใจ</div></div>
-      <div class="rating-card" onclick="sendRating(1)"><div class="rating-emoji">😡</div><div class="rating-label">ไม่พอใจมาก</div></div>
+      <!-- 5. พอใจมาก -->
+      <div class="rating-card level-5" onclick="sendRating(5)">
+        <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><path d="M9 9l-1 -1 M15 9l1 -1"></path></svg>
+        <div class="rating-label">พอใจมาก</div>
+      </div>
+      <!-- 4. พอใจ -->
+      <div class="rating-card level-4" onclick="sendRating(4)">
+        <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+        <div class="rating-label">พอใจ</div>
+      </div>
+      <!-- 3. ปานกลาง -->
+      <div class="rating-card level-3" onclick="sendRating(3)">
+        <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="15" x2="16" y2="15"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+        <div class="rating-label">ปานกลาง</div>
+      </div>
+      <!-- 2. ไม่พอใจ -->
+      <div class="rating-card level-2" onclick="sendRating(2)">
+        <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+        <div class="rating-label">ไม่พอใจ</div>
+      </div>
+      <!-- 1. ไม่พอใจมาก -->
+      <div class="rating-card level-1" onclick="sendRating(1)">
+        <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><path d="M7 9l2 1 M17 9l-2 1"></path></svg>
+        <div class="rating-label">ไม่พอใจมาก</div>
+      </div>
     </div>
   </div>
 
-  <!-- หน้าขอบคุณ -->
+  <!-- Thank You View -->
   <div id="thankyouView" class="container hidden view-center">
-    <div class="icon-thankyou">🙏</div>
-    <h2 style="color: #0066ff;">ขอบคุณสำหรับการประเมิน</h2>
+    <div class="icon-thankyou">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+    </div>
+    <h2 style="color: var(--color-5); margin-top:0;">ขอบคุณสำหรับการประเมิน</h2>
+    <p style="color: var(--text-sub);">ความคิดเห็นของคุณช่วยให้เราพัฒนาบริการให้ดียิ่งขึ้น</p>
   </div>
 
   <script>
@@ -117,24 +222,22 @@
     let tapCount = 0, tapTimer;
     let loginTapCount = 0, loginTapTimer;
 
-    // ฟังก์ชันเชื่อมต่อกับ Apps Script (แก้ปัญหา CORS สำหรับ GitHub Pages)
     async function apiCall(action, payload) {
       payload.action = action;
       try {
         const response = await fetch(SCRIPT_URL, { 
-          method: 'POST',
-          redirect: 'follow', 
-          headers: { "Content-Type": "text/plain" }, // ลบ charset ออกเพื่อกัน Safari บล็อก
+          method: 'POST', redirect: 'follow', 
+          headers: { "Content-Type": "text/plain" }, 
           body: JSON.stringify(payload) 
         });
         return await response.json();
       } catch (error) {
         console.error(error);
-        return { success: false, message: "เชื่อมต่อขัดข้อง กรุณาเช็กอินเทอร์เน็ต และการตั้งค่าลิงก์" };
+        return { success: false, message: "เชื่อมต่อขัดข้อง กรุณาเช็กอินเทอร์เน็ต" };
       }
     }
 
-    /* === ระบบไมโครโฟน (ปรับแก้สำหรับภาษาไทย + ลดอาการรวนบน iOS) === */
+    /* === ระบบไมโครโฟน Real-time === */
     let recognition;
     let isRecording = false;
     let finalTranscript = ''; 
@@ -142,10 +245,8 @@
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRecognition();
-      recognition.lang = 'th-TH'; // บังคับภาษาไทย
+      recognition.lang = 'th-TH';
       recognition.continuous = true;  
-      
-      // ปรับให้ Safari ประมวลผลได้นิ่งขึ้น
       recognition.interimResults = true; 
       
       recognition.onstart = function() {
@@ -159,25 +260,18 @@
         
         for (let i = event.resultIndex; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
-            // เอาการเว้นวรรคออก เพื่อให้ประโยคภาษาไทยติดกันและสมูทขึ้น
             newFinal += event.results[i][0].transcript; 
           } else {
             interimTranscript += event.results[i][0].transcript;
           }
         }
         
-        if (newFinal) {
-          finalTranscript += newFinal;
-        }
-        
+        if (newFinal) { finalTranscript += newFinal; }
         document.getElementById('feedbackInput').value = finalTranscript + interimTranscript;
       };
 
       recognition.onend = stopMic;
-      recognition.onerror = function(event) { 
-        stopMic(); 
-        console.log("Mic Error: ", event.error); 
-      };
+      recognition.onerror = function(event) { stopMic(); console.log("Mic Error: ", event.error); };
     } else {
       document.getElementById('micBtn').style.display = 'none';
     }
@@ -186,7 +280,7 @@
     function startMic() { isRecording = true; document.getElementById('micBtn').classList.add('mic-recording'); try{ recognition.start(); }catch(e){} }
     function stopMic() { isRecording = false; document.getElementById('micBtn').classList.remove('mic-recording'); document.getElementById('feedbackInput').placeholder = "พิมพ์ข้อความ หรือแตะไมค์เพื่อพูด..."; try{ recognition.stop(); }catch(e){} }
 
-    /* === ระบบออฟไลน์และจัดการหน้าจอ === */
+    /* === ระบบออฟไลน์ === */
     window.addEventListener('online', checkConnection);
     window.addEventListener('offline', checkConnection);
 
@@ -198,7 +292,7 @@
 
     function updateOfflineCount() {
       let data = JSON.parse(localStorage.getItem('offlineRatings') || '[]');
-      document.getElementById('offlineCount').innerText = data.length > 0 ? ` (${data.length} รายการ)` : "";
+      document.getElementById('offlineCount').innerText = data.length > 0 ? ` (${data.length})` : "";
     }
 
     function switchView(viewId) {
@@ -218,7 +312,7 @@
       const pass = document.getElementById('password').value;
       if(!id || !pass) return;
       
-      document.getElementById('loginStatus').innerText = "กำลังตรวจสอบ...";
+      document.getElementById('loginStatus').innerText = "กำลังตรวจสอบข้อมูล...";
       try{ document.documentElement.requestFullscreen(); }catch(e){} 
 
       const res = await apiCall('login', { staffId: id, password: pass });
@@ -235,7 +329,6 @@
       }
     }
 
-    // ระบบส่งคะแนนแบบทำงานเบื้องหลัง
     function sendRating(score) {
       if(isRecording) stopMic();
       const feedback = document.getElementById('feedbackInput').value;
@@ -244,15 +337,13 @@
       
       if (navigator.onLine) {
         apiCall('submitRating', { staffId: currentStaff.staffId, name: currentStaff.name, score: score, feedback: feedback })
-          .then(res => {
-            if(!res.success) saveToLocalStorage(score, feedback);
-          });
+          .then(res => { if(!res.success) saveToLocalStorage(score, feedback); });
       } else {
         saveToLocalStorage(score, feedback);
       }
       
       document.getElementById('feedbackInput').value = "";
-      setTimeout(() => { switchView('ratingView'); }, 1500);
+      setTimeout(() => { switchView('ratingView'); }, 1800);
     }
 
     function saveToLocalStorage(score, feedback) {
