@@ -125,7 +125,7 @@
         const response = await fetch(SCRIPT_URL, { 
           method: 'POST',
           redirect: 'follow', 
-          headers: { "Content-Type": "text/plain;charset=utf-8" }, // ใช้ text/plain เพื่อกันเบราว์เซอร์บล็อก
+          headers: { "Content-Type": "text/plain" }, // ใช้ text/plain เพื่อกันเบราว์เซอร์บล็อก
           body: JSON.stringify(payload) 
         });
         return await response.json();
