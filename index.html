@@ -76,12 +76,15 @@
       border: none; border-radius: 14px; 
       width: 42px; height: 42px; 
       cursor: pointer; display: flex; justify-content: center; align-items: center; 
-      transition: all 0.2s; -webkit-tap-highlight-color: transparent; 
+      transition: all 0.2s; 
+      /* ป้องกันการเด้งเมนูตอนกดค้างในมือถือ */
+      -webkit-tap-highlight-color: transparent; 
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
-    .mic-btn svg { width: 20px; height: 20px; stroke-width: 2.5px; }
-    .mic-btn:active { transform: scale(0.92); }
-    .mic-recording { background: #ef4444 !important; animation: pulse 1.2s infinite; }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); } 70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+    .mic-btn svg { width: 20px; height: 20px; stroke-width: 2.5px; pointer-events: none; }
+    .mic-recording { background: #ef4444 !important; transform: scale(1.1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
     
     /* Rating Cards */
     .rating-list { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; }
@@ -167,35 +170,31 @@
     
     <!-- Modern Input + Mic Button -->
     <div class="feedback-wrapper">
-      <input type="text" id="feedbackInput" class="feedback-input" placeholder="พิมพ์ข้อความ หรือแตะไมค์เพื่อพูด...">
-      <button class="mic-btn" id="micBtn" onclick="toggleMic()">
+      <input type="text" id="feedbackInput" class="feedback-input" placeholder="พิมพ์ข้อความ หรือกดไมค์ค้างไว้เพื่อพูด...">
+      <!-- เอา onclick ออก เพื่อใช้ Event Listener แบบกดค้างแทน -->
+      <button class="mic-btn" id="micBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
       </button>
     </div>
 
-    <!-- Rating List with Custom SVGs -->
+    <!-- Rating List -->
     <div class="rating-list">
-      <!-- 5. พอใจมาก -->
       <div class="rating-card level-5" onclick="sendRating(5)">
         <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><path d="M9 9l-1 -1 M15 9l1 -1"></path></svg>
         <div class="rating-label">พอใจมาก</div>
       </div>
-      <!-- 4. พอใจ -->
       <div class="rating-card level-4" onclick="sendRating(4)">
         <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
         <div class="rating-label">พอใจ</div>
       </div>
-      <!-- 3. ปานกลาง -->
       <div class="rating-card level-3" onclick="sendRating(3)">
         <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="15" x2="16" y2="15"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
         <div class="rating-label">ปานกลาง</div>
       </div>
-      <!-- 2. ไม่พอใจ -->
       <div class="rating-card level-2" onclick="sendRating(2)">
         <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
         <div class="rating-label">ไม่พอใจ</div>
       </div>
-      <!-- 1. ไม่พอใจมาก -->
       <div class="rating-card level-1" onclick="sendRating(1)">
         <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><path d="M7 9l2 1 M17 9l-2 1"></path></svg>
         <div class="rating-label">ไม่พอใจมาก</div>
@@ -237,10 +236,11 @@
       }
     }
 
-    /* === ระบบไมโครโฟน Real-time === */
+    /* === ระบบไมโครโฟน Real-time (อัปเดตระบบกดค้าง Push-to-Talk) === */
     let recognition;
     let isRecording = false;
     let finalTranscript = ''; 
+    const micBtn = document.getElementById('micBtn');
 
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -273,12 +273,46 @@
       recognition.onend = stopMic;
       recognition.onerror = function(event) { stopMic(); console.log("Mic Error: ", event.error); };
     } else {
-      document.getElementById('micBtn').style.display = 'none';
+      micBtn.style.display = 'none';
     }
 
-    function toggleMic() { isRecording ? stopMic() : startMic(); }
-    function startMic() { isRecording = true; document.getElementById('micBtn').classList.add('mic-recording'); try{ recognition.start(); }catch(e){} }
-    function stopMic() { isRecording = false; document.getElementById('micBtn').classList.remove('mic-recording'); document.getElementById('feedbackInput').placeholder = "พิมพ์ข้อความ หรือแตะไมค์เพื่อพูด..."; try{ recognition.stop(); }catch(e){} }
+    // ฟังก์ชันเปิด-ปิดไมค์
+    function startMic() { 
+      if (isRecording) return;
+      isRecording = true; 
+      micBtn.classList.add('mic-recording'); 
+      try { recognition.start(); } catch(e) {} 
+    }
+    
+    function stopMic() { 
+      if (!isRecording) return;
+      isRecording = false; 
+      micBtn.classList.remove('mic-recording'); 
+      document.getElementById('feedbackInput').placeholder = "พิมพ์ข้อความ หรือกดไมค์ค้างไว้เพื่อพูด..."; 
+      try { recognition.stop(); } catch(e) {} 
+    }
+
+    // ดักจับการกดปุ่ม (ทำงานได้ทั้งมือถือและคอมพิวเตอร์)
+    // สำหรับหน้าจอสัมผัส (มือถือ/แท็บเล็ต)
+    micBtn.addEventListener('touchstart', function(e) {
+      e.preventDefault(); // ป้องกันหน้าจอขยายหรือเมนูเด้ง
+      startMic();
+    });
+    micBtn.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      stopMic();
+    });
+    micBtn.addEventListener('touchcancel', stopMic);
+
+    // สำหรับใช้เมาส์คลิก (คอมพิวเตอร์)
+    micBtn.addEventListener('mousedown', function(e) {
+      if (e.button === 0) startMic(); // เช็กว่าคลิกซ้าย
+    });
+    micBtn.addEventListener('mouseup', stopMic);
+    micBtn.addEventListener('mouseleave', stopMic);
+    
+    // ป้องกันเมนูคลิกขวาเวลาแตะค้าง
+    micBtn.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 
     /* === ระบบออฟไลน์ === */
     window.addEventListener('online', checkConnection);
