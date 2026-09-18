@@ -223,20 +223,29 @@
       }
     }
 
-    async function sendRating(score) {
-      if(isRecording) stopMic();
+   // อัปเดต: ระบบส่งคะแนนแบบไม่ต้องรอเซิร์ฟเวอร์ (เร็วขึ้นมาก)
+    function sendRating(score) {
+      if(isRecording) stopMic(); // ปิดไมค์
       const feedback = document.getElementById('feedbackInput').value;
+      
+      // 1. โชว์หน้าขอบคุณทันที
       switchView('thankyouView');
       
+      // 2. แอบส่งข้อมูลไป Google Sheets เบื้องหลัง (ไม่ต้องรอให้เสร็จ)
       if (navigator.onLine) {
-        const res = await apiCall('submitRating', { staffId: currentStaff.staffId, name: currentStaff.name, score: score, feedback: feedback });
-        if(!res.success) saveToLocalStorage(score, feedback);
+        apiCall('submitRating', { staffId: currentStaff.staffId, name: currentStaff.name, score: score, feedback: feedback })
+          .then(res => {
+            if(!res.success) saveToLocalStorage(score, feedback);
+          });
       } else {
         saveToLocalStorage(score, feedback);
       }
       
+      // 3. ล้างกล่องข้อความเตรียมรับคนต่อไป
       document.getElementById('feedbackInput').value = "";
-      setTimeout(() => { switchView('ratingView'); }, 2500);
+      
+      // 4. ตั้งเวลาโชว์หน้าขอบคุณแค่ 1.5 วินาที (1500) แล้วเด้งกลับหน้าเดิมทันที!
+      setTimeout(() => { switchView('ratingView'); }, 1500);
     }
 
     function saveToLocalStorage(score, feedback) {
