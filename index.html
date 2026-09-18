@@ -113,14 +113,22 @@
     let tapCount = 0, tapTimer;
     let loginTapCount = 0, loginTapTimer;
 
-    // ฟังก์ชันเชื่อมต่อกับ Apps Script
+   // ฟังก์ชันเชื่อมต่อกับ Apps Script (อัปเดตแก้บล็อกความปลอดภัย)
     async function apiCall(action, payload) {
       payload.action = action;
       try {
-        const response = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+        const response = await fetch(SCRIPT_URL, { 
+          method: 'POST',
+          redirect: 'follow', // จำเป็นสำหรับ Google Apps Script
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8", // หลอกเบราว์เซอร์ว่าส่งข้อความธรรมดา เพื่อทะลุบล็อก
+          },
+          body: JSON.stringify(payload) 
+        });
         return await response.json();
       } catch (error) {
-        return { success: false, message: "เชื่อมต่อขัดข้อง หรือออฟไลน์" };
+        console.error(error); // พิมพ์ Error ลงคอนโซลเผื่อไว้เช็ก
+        return { success: false, message: "เชื่อมต่อขัดข้อง กรุณาเช็กเน็ต หรือลิงก์ Apps Script" };
       }
     }
 
