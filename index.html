@@ -110,7 +110,6 @@
   <script>
     // =========================================================================
     // ⚠️ สำคัญมาก: ใส่ลิงก์ Web App (ที่ลงท้ายด้วย /exec) ที่นี่!
-    // ตัวอย่าง: const SCRIPT_URL = "https://script.google.com/macros/s/AKfy.../exec";
     // =========================================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZLRzk7lntw9h_WSk9qIQLPPri9_urh9wZRWrmGDBYjvj9jUKujFPTXP5bLFGpUV45Zg/exec";
 
@@ -118,14 +117,14 @@
     let tapCount = 0, tapTimer;
     let loginTapCount = 0, loginTapTimer;
 
-    // ฟังก์ชันเชื่อมต่อกับ Apps Script (แก้ CORS ทะลุบล็อก)
+    // ฟังก์ชันเชื่อมต่อกับ Apps Script (แก้ปัญหา CORS สำหรับ GitHub Pages)
     async function apiCall(action, payload) {
       payload.action = action;
       try {
         const response = await fetch(SCRIPT_URL, { 
           method: 'POST',
           redirect: 'follow', 
-          headers: { "Content-Type": "text/plain" }, // ใช้ text/plain เพื่อกันเบราว์เซอร์บล็อก
+          headers: { "Content-Type": "text/plain" }, // ลบ charset ออกเพื่อกัน Safari บล็อก
           body: JSON.stringify(payload) 
         });
         return await response.json();
@@ -186,6 +185,7 @@
     function toggleMic() { isRecording ? stopMic() : startMic(); }
     function startMic() { isRecording = true; document.getElementById('micBtn').classList.add('mic-recording'); try{ recognition.start(); }catch(e){} }
     function stopMic() { isRecording = false; document.getElementById('micBtn').classList.remove('mic-recording'); document.getElementById('feedbackInput').placeholder = "พิมพ์ข้อความ หรือแตะไมค์เพื่อพูด..."; try{ recognition.stop(); }catch(e){} }
+
     /* === ระบบออฟไลน์และจัดการหน้าจอ === */
     window.addEventListener('online', checkConnection);
     window.addEventListener('offline', checkConnection);
@@ -235,15 +235,13 @@
       }
     }
 
-    // อัปเดต: ระบบส่งคะแนนแบบไม่ต้องรอเซิร์ฟเวอร์ (ทำงานเบื้องหลัง)
+    // ระบบส่งคะแนนแบบทำงานเบื้องหลัง
     function sendRating(score) {
       if(isRecording) stopMic();
       const feedback = document.getElementById('feedbackInput').value;
       
-      // 1. โชว์หน้าขอบคุณทันที
       switchView('thankyouView');
       
-      // 2. แอบส่งข้อมูลเบื้องหลัง
       if (navigator.onLine) {
         apiCall('submitRating', { staffId: currentStaff.staffId, name: currentStaff.name, score: score, feedback: feedback })
           .then(res => {
@@ -253,10 +251,7 @@
         saveToLocalStorage(score, feedback);
       }
       
-      // 3. ล้างกล่องข้อความเตรียมรับคนต่อไป
       document.getElementById('feedbackInput').value = "";
-      
-      // 4. ตั้งเวลาโชว์หน้าขอบคุณแค่ 1.5 วินาที แล้วเด้งกลับเลย!
       setTimeout(() => { switchView('ratingView'); }, 1500);
     }
 
