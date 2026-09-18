@@ -5,124 +5,141 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #0056d2;
-      --bg-gradient-1: #f0f4f8;
-      --bg-gradient-2: #d9e2ec;
-      --card-bg: rgba(255, 255, 255, 0.98);
-      --text-main: #102a43;
-      --text-sub: #627d98;
-      --border-color: #bcccdc;
+      --primary: #0a58ca;
+      --bg-top: #003b73;
+      --bg-bottom: #0074b7;
       
-      /* Rating Colors */
-      --color-5: #209958; /* พอใจมาก */
-      --color-4: #0066ff; /* พอใจ */
-      --color-3: #f59e0b; /* ปานกลาง */
-      --color-2: #f97316; /* ไม่พอใจ */
-      --color-1: #ef4444; /* ไม่พอใจมาก */
+      /* Rating Colors matching Image 1 */
+      --c5: #10b981; --c5-light: #d1fae5;
+      --c4: #3b82f6; --c4-light: #dbeafe;
+      --c3: #f59e0b; --c3-light: #fef3c7;
+      --c2: #f97316; --c2-light: #ffedd5;
+      --c1: #ef4444; --c1-light: #fee2e2;
     }
 
     body { 
       font-family: 'Prompt', sans-serif; 
-      background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%); 
+      /* พื้นหลังโทนสีน้ำเงินสถานีรถไฟ */
+      background: linear-gradient(160deg, var(--bg-top) 0%, var(--bg-bottom) 100%); 
       margin: 0; padding: 0; 
       display: flex; flex-direction: column; align-items: center; justify-content: center; 
       height: 100vh; height: 100dvh; 
       overflow: hidden; touch-action: manipulation; 
     }
     
+    /* Header Area (Logo & Profile) */
+    .app-header {
+      width: 90%; max-width: 440px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 15px; z-index: 2;
+    }
+    .header-logo { height: 60px; object-fit: contain; filter: brightness(0) invert(1); }
+    .profile-img { width: 75px; height: 75px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+
+    /* Main White Card */
     .container { 
-      background: var(--card-bg); 
-      backdrop-filter: blur(12px); 
+      background: #ffffff; 
       width: 92%; max-width: 440px; 
-      height: 96%; max-height: 850px; 
-      border-radius: 24px; 
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05); 
-      padding: 25px 20px; 
+      height: 85%; max-height: 800px; 
+      border-radius: 35px; 
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
+      padding: 30px 20px; 
       box-sizing: border-box; 
       display: flex; flex-direction: column; 
+      position: relative; z-index: 1;
     }
     
     .hidden { display: none !important; }
     .view-center { justify-content: center; align-items: center; text-align: center; }
     
-    /* Header & Profile */
-    .header-area { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; width: 100%; }
-    .org-logo { max-width: 130px; max-height: 70px; object-fit: contain; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .login-logo { width: 160px; max-width: 90%; margin-bottom: 30px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .profile-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    /* Staff Info (Top of Card - Style 2) */
+    .info-area { text-align: center; margin-bottom: 20px; }
+    .greeting-badge { display: inline-block; background: #eef4fb; color: var(--primary); padding: 5px 20px; border-radius: 20px; font-weight: 600; font-size: 15px; margin-bottom: 10px; }
+    .staff-name { font-size: 24px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+    .instruction { font-size: 15px; color: #64748b; }
     
-    .info-area { text-align: center; margin-bottom: 15px; }
-    .staff-name { font-size: 22px; font-weight: 600; color: var(--text-main); margin-bottom: 2px; }
-    .instruction { font-size: 14px; color: var(--text-sub); }
-    
-    /* Input & Mic Box (Modern Style) */
-    .feedback-wrapper { position: relative; margin-bottom: 20px; width: 100%; }
-    .feedback-input { 
-      width: 100%; padding: 16px 60px 16px 20px; 
-      border: 2px solid #e1e8ef; border-radius: 20px; 
-      font-size: 15px; font-family: 'Prompt', sans-serif; 
-      outline: none; background: #f8fafc; color: var(--text-main); 
-      box-sizing: border-box; transition: all 0.3s;
+    /* Input & Mic Box (Style 2 - Capsule) */
+    .input-capsule { 
+      display: flex; align-items: center; 
+      background: #f1f5f9; border-radius: 50px; 
+      padding: 6px 15px 6px 6px; margin-bottom: 25px; 
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+      border: 1px solid #e2e8f0;
     }
-    .feedback-input:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(0, 86, 210, 0.1); }
-    .feedback-input::placeholder { color: #9fb3c8; }
-    
     .mic-btn { 
-      position: absolute; right: 8px; top: 8px; 
       background: var(--primary); color: white; 
-      border: none; border-radius: 14px; 
-      width: 42px; height: 42px; 
+      border: none; border-radius: 50%; 
+      width: 50px; height: 50px; flex-shrink: 0;
       cursor: pointer; display: flex; justify-content: center; align-items: center; 
-      transition: all 0.2s; 
-      /* ป้องกันการเด้งเมนูตอนกดค้างในมือถือ */
-      -webkit-tap-highlight-color: transparent; 
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      user-select: none;
+      transition: all 0.2s; box-shadow: 0 4px 10px rgba(10, 88, 202, 0.3);
+      -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; user-select: none;
     }
-    .mic-btn svg { width: 20px; height: 20px; stroke-width: 2.5px; pointer-events: none; }
-    .mic-recording { background: #ef4444 !important; transform: scale(1.1); box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
+    .mic-btn svg { width: 24px; height: 24px; stroke-width: 2px; pointer-events: none; }
+    .mic-recording { background: #ef4444 !important; transform: scale(1.1); box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); animation: pulse 1.5s infinite; }
+    .feedback-input { 
+      flex: 1; border: none; font-size: 15px; font-family: 'Prompt', sans-serif; 
+      outline: none; background: transparent; padding: 0 15px; color: #1e293b; 
+    }
+    .feedback-input::placeholder { color: #94a3b8; }
     
-    /* Rating Cards */
-    .rating-list { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+    /* Rating Cards (Style 1 - Gradients) */
+    .rating-list { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; overflow-y: auto; padding-bottom: 5px; }
     .rating-card { 
-      flex: 1; min-height: 65px; display: flex; align-items: center; 
-      background: #fff; border: 2px solid #e1e8ef; border-radius: 18px; 
-      padding: 0 20px; cursor: pointer; transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); 
+      display: flex; align-items: center; min-height: 75px; 
+      border-radius: 20px; padding: 0 15px 0 10px; cursor: pointer; 
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); 
       -webkit-tap-highlight-color: transparent; 
     }
-    .rating-card:active { transform: scale(0.96); }
+    .rating-card:active { transform: scale(0.97); }
     
-    .rating-card.level-5 { color: var(--color-5); }
-    .rating-card.level-5:active { border-color: var(--color-5); background: #f0fdf4; }
-    .rating-card.level-4 { color: var(--color-4); }
-    .rating-card.level-4:active { border-color: var(--color-4); background: #eff6ff; }
-    .rating-card.level-3 { color: var(--color-3); }
-    .rating-card.level-3:active { border-color: var(--color-3); background: #fffbeb; }
-    .rating-card.level-2 { color: var(--color-2); }
-    .rating-card.level-2:active { border-color: var(--color-2); background: #fff7ed; }
-    .rating-card.level-1 { color: var(--color-1); }
-    .rating-card.level-1:active { border-color: var(--color-1); background: #fef2f2; }
+    .icon-circle { width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .icon-circle svg { width: 35px; height: 35px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    
+    .text-group { flex: 1; margin-left: 15px; }
+    .card-title { font-size: 20px; font-weight: 700; margin-bottom: -2px; }
+    .card-desc { font-size: 13px; font-weight: 400; opacity: 0.8; }
+    .arrow-icon { font-weight: 700; font-size: 20px; }
 
-    .rating-icon { width: 36px; height: 36px; margin-right: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .rating-label { font-size: 17px; font-weight: 500; color: var(--text-main); }
+    /* Level 5 */
+    .level-5 { background: linear-gradient(90deg, var(--c5-light) 0%, #fff 80%); border: 1.5px solid var(--c5-light); }
+    .level-5 .icon-circle { background: var(--c5); }
+    .level-5 .card-title, .level-5 .card-desc { color: #065f46; }
+    .level-5 .arrow-icon { color: var(--c5); }
+    /* Level 4 */
+    .level-4 { background: linear-gradient(90deg, var(--c4-light) 0%, #fff 80%); border: 1.5px solid var(--c4-light); }
+    .level-4 .icon-circle { background: var(--c4); }
+    .level-4 .card-title, .level-4 .card-desc { color: #1e3a8a; }
+    .level-4 .arrow-icon { color: var(--c4); }
+    /* Level 3 */
+    .level-3 { background: linear-gradient(90deg, var(--c3-light) 0%, #fff 80%); border: 1.5px solid var(--c3-light); }
+    .level-3 .icon-circle { background: var(--c3); }
+    .level-3 .card-title, .level-3 .card-desc { color: #78350f; }
+    .level-3 .arrow-icon { color: var(--c3); }
+    /* Level 2 */
+    .level-2 { background: linear-gradient(90deg, var(--c2-light) 0%, #fff 80%); border: 1.5px solid var(--c2-light); }
+    .level-2 .icon-circle { background: var(--c2); }
+    .level-2 .card-title, .level-2 .card-desc { color: #7c2d12; }
+    .level-2 .arrow-icon { color: var(--c2); }
+    /* Level 1 */
+    .level-1 { background: linear-gradient(90deg, var(--c1-light) 0%, #fff 80%); border: 1.5px solid var(--c1-light); }
+    .level-1 .icon-circle { background: var(--c1); }
+    .level-1 .card-title, .level-1 .card-desc { color: #7f1d1d; }
+    .level-1 .arrow-icon { color: var(--c1); }
 
-    /* Forms & Buttons */
-    .form-input { width: 100%; padding: 16px; margin: 8px 0; border: 2px solid #e1e8ef; border-radius: 16px; font-size: 16px; font-family: 'Prompt', sans-serif; box-sizing: border-box; background: #f8fafc; transition: 0.3s; }
+    /* Footer */
+    .footer-text { text-align: center; color: var(--primary); font-weight: 600; font-size: 15px; margin-top: 15px; }
+
+    /* Forms */
+    .form-input { width: 100%; padding: 16px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 20px; font-size: 16px; font-family: 'Prompt', sans-serif; box-sizing: border-box; background: #f8fafc; }
     .form-input:focus { border-color: var(--primary); background: #fff; outline: none; }
-    input[type="file"].form-input { padding: 12px; font-size: 14px; background: #fff; border: 2px dashed #bcccdc; }
+    .btn { background-color: var(--primary); color: white; border: none; padding: 16px; font-size: 18px; border-radius: 20px; width: 100%; margin-top: 15px; font-weight: 600; font-family: 'Prompt', sans-serif; cursor: pointer; box-shadow: 0 4px 15px rgba(10, 88, 202, 0.3); }
     
-    .btn { background-color: var(--primary); color: white; border: none; padding: 16px; font-size: 18px; border-radius: 16px; width: 100%; margin-top: 15px; font-weight: 600; font-family: 'Prompt', sans-serif; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0, 86, 210, 0.2); }
-    .btn:active { transform: translateY(2px); box-shadow: 0 2px 6px rgba(0, 86, 210, 0.2); }
-    .btn-secondary { background-color: #94a3b8; box-shadow: 0 4px 12px rgba(148, 163, 184, 0.2); }
-    
-    .icon-thankyou { display: flex; justify-content: center; margin-bottom: 20px; color: var(--color-5); }
-    .icon-thankyou svg { width: 80px; height: 80px; stroke-width: 1.5; }
-    
-    #offlineBanner { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--color-1); color: white; padding: 12px; text-align: center; font-size: 14px; font-weight: 500; z-index: 9999; transition: transform 0.3s; }
+    #offlineBanner { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--c1); color: white; padding: 12px; text-align: center; font-size: 14px; font-weight: 500; z-index: 9999; transition: transform 0.3s; }
     .banner-hidden { transform: translateY(100%); }
   </style>
 </head>
@@ -130,85 +147,90 @@
 
   <!-- Offline Banner -->
   <div id="offlineBanner" class="banner-hidden">
-    <svg style="width:16px; height:16px; vertical-align:middle; margin-right:5px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a15.16 15.16 0 0 1-2.46 3.7M2.43 2.43l19.14 19.14M2 12s3-7 10-7M5.64 5.64A15.16 15.16 0 0 0 2 12s3 7 10 7a10.43 10.43 0 0 0 5.27-1.38"></path></svg>
-    ขาดการเชื่อมต่ออินเทอร์เน็ต (ระบบจะบันทึกชั่วคราว) <span id="offlineCount"></span>
+    🔴 ขาดการเชื่อมต่ออินเทอร์เน็ต (ระบบจะบันทึกชั่วคราว) <span id="offlineCount"></span>
   </div>
 
   <!-- Login View -->
   <div id="loginView" class="container view-center">
-    <img id="orgLogoLogin" class="login-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" onclick="hiddenAddStaff()">
-    <h2 style="color: var(--text-main); margin-top:0;">เข้าสู่ระบบเจ้าหน้าที่</h2>
+    <img id="orgLogoLogin" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" style="width: 160px; margin-bottom: 30px;" onclick="hiddenAddStaff()">
+    <h2 style="color: #1e293b; margin-top:0;">เข้าสู่ระบบเจ้าหน้าที่</h2>
     <input type="text" id="staffId" class="form-input" placeholder="รหัสพนักงาน" required>
     <input type="password" id="password" class="form-input" placeholder="รหัสผ่าน" required>
     <button type="button" class="btn" onclick="doLogin()">เข้าสู่ระบบ</button>
-    <p id="loginStatus" style="color:var(--color-1); margin-top: 15px;"></p>
+    <p id="loginStatus" style="color:var(--c1); margin-top: 15px;"></p>
   </div>
 
   <!-- Add Staff View -->
   <div id="addStaffView" class="container view-center hidden">
-    <h2 style="color: var(--text-main); margin-top:0;">เพิ่มพนักงานใหม่</h2>
-    <input type="text" id="newStaffId" class="form-input" placeholder="รหัสพนักงาน" required>
-    <input type="text" id="newPassword" class="form-input" placeholder="รหัสผ่าน" required>
-    <input type="text" id="newName" class="form-input" placeholder="ชื่อ - นามสกุล" required>
-    <input type="file" id="newPhoto" class="form-input" accept="image/*">
+    <h2 style="color: #1e293b;">เพิ่มพนักงานใหม่</h2>
+    <input type="text" id="newStaffId" class="form-input" placeholder="รหัสพนักงาน">
+    <input type="text" id="newPassword" class="form-input" placeholder="รหัสผ่าน">
+    <input type="text" id="newName" class="form-input" placeholder="ชื่อ - นามสกุล">
+    <input type="file" id="newPhoto" class="form-input" accept="image/*" style="padding:12px;">
     <button type="button" class="btn" id="addBtn" onclick="submitNewStaff()">บันทึกข้อมูล</button>
-    <button type="button" class="btn btn-secondary" onclick="switchView('loginView')">ยกเลิก</button>
+    <button type="button" class="btn" style="background:#94a3b8; box-shadow:none;" onclick="switchView('loginView')">ยกเลิก</button>
     <p id="addStatus" style="font-weight: 500; margin-top: 15px; color: var(--primary);"></p>
+  </div>
+
+  <!-- HEADER (Shows only on Rating View) -->
+  <div id="ratingHeader" class="app-header hidden">
+    <img id="orgLogo" class="header-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" onclick="hiddenLogout()">
+    <img id="staffPhoto" class="profile-img" src="">
   </div>
 
   <!-- Rating View -->
   <div id="ratingView" class="container hidden">
-    <div class="header-area">
-      <img id="orgLogo" class="org-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" onclick="hiddenLogout()">
-      <img id="staffPhoto" class="profile-img" id="staffPhotoDisplay">
-    </div>
-    
+    <!-- Staff Info (Top) -->
     <div class="info-area">
+      <div class="greeting-badge">✨ สวัสดีค่ะ / ครับ ✨</div>
       <div id="staffNameDisplay" class="staff-name">ชื่อ-นามสกุล</div>
       <div class="instruction">กรุณาประเมินความพึงพอใจในการให้บริการ</div>
     </div>
     
-    <!-- Modern Input + Mic Button -->
-    <div class="feedback-wrapper">
-      <input type="text" id="feedbackInput" class="feedback-input" placeholder="พิมพ์ข้อความ หรือกดไมค์ค้างไว้เพื่อพูด...">
-      <!-- เอา onclick ออก เพื่อใช้ Event Listener แบบกดค้างแทน -->
+    <!-- Input Capsule (Style 2) -->
+    <div class="input-capsule">
       <button class="mic-btn" id="micBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
       </button>
+      <input type="text" id="feedbackInput" class="feedback-input" placeholder="พิมพ์ข้อความ หรือกดไมค์ค้างไว้เพื่อพูด...">
     </div>
 
-    <!-- Rating List -->
+    <!-- Rating List (Style 1) -->
     <div class="rating-list">
       <div class="rating-card level-5" onclick="sendRating(5)">
-        <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><path d="M9 9l-1 -1 M15 9l1 -1"></path></svg>
-        <div class="rating-label">พอใจมาก</div>
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><path d="M9 9l-1 -1 M15 9l1 -1"></path></svg></div>
+        <div class="text-group"><div class="card-title">พอใจมาก</div><div class="card-desc">ดีเยี่ยม บริการประทับใจ</div></div>
+        <div class="arrow-icon">❯</div>
       </div>
       <div class="rating-card level-4" onclick="sendRating(4)">
-        <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
-        <div class="rating-label">พอใจ</div>
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></div>
+        <div class="text-group"><div class="card-title">พอใจ</div><div class="card-desc">บริการดี สะดวก รวดเร็ว</div></div>
+        <div class="arrow-icon">❯</div>
       </div>
       <div class="rating-card level-3" onclick="sendRating(3)">
-        <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="15" x2="16" y2="15"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
-        <div class="rating-label">ปานกลาง</div>
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><line x1="8" y1="15" x2="16" y2="15"></line><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></div>
+        <div class="text-group"><div class="card-title">ปานกลาง</div><div class="card-desc">พอใช้ได้ ยังมีบางอย่างต้องปรับปรุง</div></div>
+        <div class="arrow-icon">❯</div>
       </div>
       <div class="rating-card level-2" onclick="sendRating(2)">
-        <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
-        <div class="rating-label">ไม่พอใจ</div>
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg></div>
+        <div class="text-group"><div class="card-title">ไม่พอใจ</div><div class="card-desc">มีปัญหา ควรปรับปรุง</div></div>
+        <div class="arrow-icon">❯</div>
       </div>
       <div class="rating-card level-1" onclick="sendRating(1)">
-        <svg class="rating-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><path d="M7 9l2 1 M17 9l-2 1"></path></svg>
-        <div class="rating-label">ไม่พอใจมาก</div>
+        <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><path d="M7 9l2 1 M17 9l-2 1"></path></svg></div>
+        <div class="text-group"><div class="card-title">ไม่พอใจมาก</div><div class="card-desc">ต้องการให้ปรับปรุงอย่างเร่งด่วน</div></div>
+        <div class="arrow-icon">❯</div>
       </div>
     </div>
+    <div class="footer-text">💙 ขอบคุณที่ใช้บริการ 💙</div>
   </div>
 
   <!-- Thank You View -->
   <div id="thankyouView" class="container hidden view-center">
-    <div class="icon-thankyou">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-    </div>
-    <h2 style="color: var(--color-5); margin-top:0;">ขอบคุณสำหรับการประเมิน</h2>
-    <p style="color: var(--text-sub);">ความคิดเห็นของคุณช่วยให้เราพัฒนาบริการให้ดียิ่งขึ้น</p>
+    <svg style="width:100px; height:100px; color:var(--c5); margin-bottom:20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+    <h2 style="color: var(--c5); margin-top:0; font-size:28px;">ขอบคุณสำหรับการประเมิน</h2>
+    <p style="color: #64748b; font-size:16px;">ความคิดเห็นของคุณช่วยให้เราพัฒนาบริการให้ดียิ่งขึ้น</p>
   </div>
 
   <script>
@@ -236,7 +258,7 @@
       }
     }
 
-    /* === ระบบไมโครโฟน Real-time (อัปเดตระบบกดค้าง Push-to-Talk) === */
+    /* === ระบบไมโครโฟน (Push-to-Talk) === */
     let recognition;
     let isRecording = false;
     let finalTranscript = ''; 
@@ -257,64 +279,41 @@
       recognition.onresult = function(event) {
         let interimTranscript = '';
         let newFinal = '';
-        
         for (let i = event.resultIndex; i < event.results.length; ++i) {
-          if (event.results[i].isFinal) {
-            newFinal += event.results[i][0].transcript; 
-          } else {
-            interimTranscript += event.results[i][0].transcript;
-          }
+          if (event.results[i].isFinal) newFinal += event.results[i][0].transcript; 
+          else interimTranscript += event.results[i][0].transcript;
         }
-        
-        if (newFinal) { finalTranscript += newFinal; }
+        if (newFinal) finalTranscript += newFinal; 
         document.getElementById('feedbackInput').value = finalTranscript + interimTranscript;
       };
 
       recognition.onend = stopMic;
-      recognition.onerror = function(event) { stopMic(); console.log("Mic Error: ", event.error); };
+      recognition.onerror = function(e) { stopMic(); };
     } else {
       micBtn.style.display = 'none';
     }
 
-    // ฟังก์ชันเปิด-ปิดไมค์
     function startMic() { 
       if (isRecording) return;
-      isRecording = true; 
-      micBtn.classList.add('mic-recording'); 
+      isRecording = true; micBtn.classList.add('mic-recording'); 
       try { recognition.start(); } catch(e) {} 
     }
-    
     function stopMic() { 
       if (!isRecording) return;
-      isRecording = false; 
-      micBtn.classList.remove('mic-recording'); 
+      isRecording = false; micBtn.classList.remove('mic-recording'); 
       document.getElementById('feedbackInput').placeholder = "พิมพ์ข้อความ หรือกดไมค์ค้างไว้เพื่อพูด..."; 
       try { recognition.stop(); } catch(e) {} 
     }
 
-    // ดักจับการกดปุ่ม (ทำงานได้ทั้งมือถือและคอมพิวเตอร์)
-    // สำหรับหน้าจอสัมผัส (มือถือ/แท็บเล็ต)
-    micBtn.addEventListener('touchstart', function(e) {
-      e.preventDefault(); // ป้องกันหน้าจอขยายหรือเมนูเด้ง
-      startMic();
-    });
-    micBtn.addEventListener('touchend', function(e) {
-      e.preventDefault();
-      stopMic();
-    });
+    micBtn.addEventListener('touchstart', function(e) { e.preventDefault(); startMic(); });
+    micBtn.addEventListener('touchend', function(e) { e.preventDefault(); stopMic(); });
     micBtn.addEventListener('touchcancel', stopMic);
-
-    // สำหรับใช้เมาส์คลิก (คอมพิวเตอร์)
-    micBtn.addEventListener('mousedown', function(e) {
-      if (e.button === 0) startMic(); // เช็กว่าคลิกซ้าย
-    });
+    micBtn.addEventListener('mousedown', function(e) { if (e.button === 0) startMic(); });
     micBtn.addEventListener('mouseup', stopMic);
     micBtn.addEventListener('mouseleave', stopMic);
-    
-    // ป้องกันเมนูคลิกขวาเวลาแตะค้าง
     micBtn.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 
-    /* === ระบบออฟไลน์ === */
+    /* === ควบคุมหน้าจอ === */
     window.addEventListener('online', checkConnection);
     window.addEventListener('offline', checkConnection);
 
@@ -330,8 +329,9 @@
     }
 
     function switchView(viewId) {
-      document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+      document.querySelectorAll('.container, .app-header').forEach(c => c.classList.add('hidden'));
       document.getElementById(viewId).classList.remove('hidden');
+      if(viewId === 'ratingView') document.getElementById('ratingHeader').classList.remove('hidden');
     }
 
     function hiddenAddStaff() {
@@ -366,7 +366,6 @@
     function sendRating(score) {
       if(isRecording) stopMic();
       const feedback = document.getElementById('feedbackInput').value;
-      
       switchView('thankyouView');
       
       if (navigator.onLine) {
@@ -391,10 +390,7 @@
       let data = JSON.parse(localStorage.getItem('offlineRatings') || '[]');
       if (data.length > 0) {
         const res = await apiCall('syncOfflineRatings', { offlineData: data });
-        if(res.success) {
-          localStorage.removeItem('offlineRatings');
-          document.getElementById('offlineCount').innerText = "";
-        }
+        if(res.success) { localStorage.removeItem('offlineRatings'); document.getElementById('offlineCount').innerText = ""; }
       }
     }
 
@@ -415,7 +411,7 @@
       if(!id || !pass || !name) return;
       
       document.getElementById('addBtn').disabled = true;
-      document.getElementById('addStatus').innerText = "กำลังบันทึกข้อมูล (ใช้เวลาสักครู่)...";
+      document.getElementById('addStatus').innerText = "กำลังบันทึกข้อมูล...";
       
       if(file) {
         const reader = new FileReader();
