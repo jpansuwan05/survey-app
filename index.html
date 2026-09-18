@@ -108,9 +108,10 @@
   </div>
 
   <script>
-    // ==========================================
-    // ใส่ลิงก์ Web App (ที่ลงท้ายด้วย /exec) ที่นี่
-    // ==========================================
+    // =========================================================================
+    // ⚠️ สำคัญมาก: ใส่ลิงก์ Web App (ที่ลงท้ายด้วย /exec) ที่นี่!
+    // ตัวอย่าง: const SCRIPT_URL = "https://script.google.com/macros/s/AKfy.../exec";
+    // =========================================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZLRzk7lntw9h_WSk9qIQLPPri9_urh9wZRWrmGDBYjvj9jUKujFPTXP5bLFGpUV45Zg/exec";
 
     let currentStaff = {};
@@ -124,13 +125,13 @@
         const response = await fetch(SCRIPT_URL, { 
           method: 'POST',
           redirect: 'follow', 
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          headers: { "Content-Type": "text/plain;charset=utf-8" }, // ใช้ text/plain เพื่อกันเบราว์เซอร์บล็อก
           body: JSON.stringify(payload) 
         });
         return await response.json();
       } catch (error) {
         console.error(error);
-        return { success: false, message: "เชื่อมต่อขัดข้อง กรุณาเช็กอินเทอร์เน็ต" };
+        return { success: false, message: "เชื่อมต่อขัดข้อง กรุณาเช็กอินเทอร์เน็ต และการตั้งค่าลิงก์" };
       }
     }
 
@@ -143,8 +144,8 @@
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRecognition();
       recognition.lang = 'th-TH';
-      recognition.continuous = true; 
-      recognition.interimResults = true; 
+      recognition.continuous = true;  // ให้ฟังต่อเนื่อง ไม่ตัดเอง
+      recognition.interimResults = true; // โชว์ข้อความทันทีขณะพูด
       
       recognition.onstart = function() {
         document.getElementById('feedbackInput').placeholder = "กำลังฟัง... พูดได้เลยครับ";
@@ -223,15 +224,15 @@
       }
     }
 
-   // อัปเดต: ระบบส่งคะแนนแบบไม่ต้องรอเซิร์ฟเวอร์ (เร็วขึ้นมาก)
+    // อัปเดต: ระบบส่งคะแนนแบบไม่ต้องรอเซิร์ฟเวอร์ (ทำงานเบื้องหลัง)
     function sendRating(score) {
-      if(isRecording) stopMic(); // ปิดไมค์
+      if(isRecording) stopMic();
       const feedback = document.getElementById('feedbackInput').value;
       
       // 1. โชว์หน้าขอบคุณทันที
       switchView('thankyouView');
       
-      // 2. แอบส่งข้อมูลไป Google Sheets เบื้องหลัง (ไม่ต้องรอให้เสร็จ)
+      // 2. แอบส่งข้อมูลเบื้องหลัง
       if (navigator.onLine) {
         apiCall('submitRating', { staffId: currentStaff.staffId, name: currentStaff.name, score: score, feedback: feedback })
           .then(res => {
@@ -244,7 +245,7 @@
       // 3. ล้างกล่องข้อความเตรียมรับคนต่อไป
       document.getElementById('feedbackInput').value = "";
       
-      // 4. ตั้งเวลาโชว์หน้าขอบคุณแค่ 1.5 วินาที (1500) แล้วเด้งกลับหน้าเดิมทันที!
+      // 4. ตั้งเวลาโชว์หน้าขอบคุณแค่ 1.5 วินาที แล้วเด้งกลับเลย!
       setTimeout(() => { switchView('ratingView'); }, 1500);
     }
 
