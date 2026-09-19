@@ -12,6 +12,7 @@
       --bg-top: #003b73;
       --bg-bottom: #0074b7;
       
+      /* Rating Colors */
       --c5: #10b981; --c5-light: #d1fae5;
       --c4: #3b82f6; --c4-light: #dbeafe;
       --c3: #f59e0b; --c3-light: #fef3c7;
@@ -28,6 +29,7 @@
       overflow: hidden; touch-action: manipulation; 
     }
     
+    /* Header Area */
     .app-header {
       width: 90%; max-width: 440px;
       display: flex; justify-content: space-between; align-items: center;
@@ -45,6 +47,7 @@
       transform: translateY(30px); 
     }
 
+    /* Main White Card */
     .container { 
       background: #ffffff; 
       width: 92%; max-width: 440px; 
@@ -61,15 +64,17 @@
     .hidden { display: none !important; }
     .view-center { justify-content: center; align-items: center; text-align: center; }
     
+    /* Staff Info */
     .info-area { text-align: center; margin-bottom: 12px; }
     .greeting-badge { display: inline-block; background: #eef4fb; color: var(--primary); padding: 4px 15px; border-radius: 20px; font-weight: 600; font-size: 14px; margin-bottom: 6px; }
     .staff-name { font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
     .instruction { font-size: 14px; color: #64748b; }
     
+    /* Input & Mic Box */
     .input-capsule { 
       display: flex; align-items: center; 
       background: #f1f5f9; border-radius: 50px; 
-      padding: 5px 5px 5px 15px; margin-bottom: 15px; 
+      padding: 5px 5px 5px 15px; margin-bottom: 8px; 
       box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
       border: 1px solid #e2e8f0;
     }
@@ -88,25 +93,42 @@
     }
     .mic-btn svg { width: 22px; height: 22px; stroke-width: 2px; pointer-events: none; }
     .mic-recording { background: #ef4444 !important; transform: scale(1.1); box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); animation: pulse 1.5s infinite; }
+    
+    /* Quick Tags (ปุ่มทางลัด) */
+    .quick-tags {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;
+      margin-bottom: 12px;
+    }
+    .tag-btn {
+      background: #ffffff; border: 1.5px solid #cbd5e1; color: #475569;
+      padding: 5px 12px; border-radius: 15px; font-size: 13px; font-weight: 500; font-family: 'Prompt', sans-serif;
+      cursor: pointer; transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+    }
+    .tag-btn:active {
+      transform: scale(0.92); background: #e0e7ff; color: var(--primary); border-color: var(--primary);
+    }
+
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
+    /* Rating Cards */
     .rating-list { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; overflow-y: auto; padding-bottom: 5px; }
     .rating-card { 
-      display: flex; align-items: center; min-height: 65px; 
+      display: flex; align-items: center; min-height: 62px; 
       border-radius: 18px; padding: 0 15px 0 10px; cursor: pointer; 
       transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); 
       -webkit-tap-highlight-color: transparent; 
     }
     .rating-card:active { transform: scale(0.97); }
     
-    .icon-circle { width: 48px; height: 48px; border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    .icon-circle svg { width: 30px; height: 30px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-circle { width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .icon-circle svg { width: 28px; height: 28px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     
     .text-group { flex: 1; margin-left: 12px; }
-    .card-title { font-size: 18px; font-weight: 700; margin-bottom: -2px; }
+    .card-title { font-size: 17px; font-weight: 700; margin-bottom: -2px; }
     .card-desc { font-size: 12px; font-weight: 400; opacity: 0.8; }
     .arrow-icon { font-weight: 700; font-size: 18px; }
 
+    /* Level Colors */
     .level-5 { background: linear-gradient(90deg, var(--c5-light) 0%, #fff 80%); border: 1.5px solid var(--c5-light); }
     .level-5 .icon-circle { background: var(--c5); }
     .level-5 .card-title, .level-5 .card-desc { color: #065f46; }
@@ -132,8 +154,9 @@
     .level-1 .card-title, .level-1 .card-desc { color: #7f1d1d; }
     .level-1 .arrow-icon { color: var(--c1); }
 
-    .footer-text { text-align: center; color: var(--primary); font-weight: 600; font-size: 14px; margin-top: 10px; }
+    .footer-text { text-align: center; color: var(--primary); font-weight: 600; font-size: 14px; margin-top: 8px; }
 
+    /* Forms */
     .form-input { width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 20px; font-size: 15px; font-family: 'Prompt', sans-serif; box-sizing: border-box; background: #f8fafc; }
     .form-input:focus { border-color: var(--primary); background: #fff; outline: none; }
     .btn { background-color: var(--primary); color: white; border: none; padding: 14px; font-size: 16px; border-radius: 20px; width: 100%; margin-top: 12px; font-weight: 600; font-family: 'Prompt', sans-serif; cursor: pointer; box-shadow: 0 4px 15px rgba(10, 88, 202, 0.3); }
@@ -168,11 +191,13 @@
     <p id="addStatus" style="font-weight: 500; margin-top: 15px; color: var(--primary); font-size: 14px;"></p>
   </div>
 
+  <!-- HEADER โลโก้และรูปโปรไฟล์ที่ลอยอยู่ด้านบน -->
   <div id="ratingHeader" class="app-header hidden">
     <img id="orgLogo" class="header-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" onclick="hiddenLogout()">
     <img id="staffPhoto" class="profile-img" src="">
   </div>
 
+  <!-- หน้าให้คะแนนประเมิน -->
   <div id="ratingView" class="container hidden">
     <div class="info-area">
       <div class="greeting-badge">✨ สวัสดีค่ะ / ครับ ✨</div>
@@ -185,6 +210,14 @@
       <button class="mic-btn" id="micBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
       </button>
+    </div>
+
+    <!-- ปุ่ม Quick Tags -->
+    <div class="quick-tags">
+      <button class="tag-btn" onclick="addQuickTag('บริการล่าช้า')">บริการล่าช้า</button>
+      <button class="tag-btn" onclick="addQuickTag('พูดจาไม่สุภาพ')">พูดจาไม่สุภาพ</button>
+      <button class="tag-btn" onclick="addQuickTag('ให้ข้อมูลผิด/ไม่ครบ')">ให้ข้อมูลผิด/ไม่ครบ</button>
+      <button class="tag-btn" onclick="addQuickTag('ขั้นตอนยุ่งยาก')">ขั้นตอนยุ่งยาก</button>
     </div>
 
     <div class="rating-list">
@@ -244,6 +277,19 @@
         return { success: false, message: "เชื่อมต่อขัดข้อง กรุณาเช็กอินเทอร์เน็ต" };
       }
     }
+    
+    // ฟังก์ชันสำหรับเพิ่มคำจาก Quick Tags ลงในช่องพิมพ์
+    function addQuickTag(tagText) {
+      const input = document.getElementById('feedbackInput');
+      // เช็กว่าถ้ามีคำนี้อยู่แล้ว จะไม่ให้กดเพิ่มซ้ำ
+      if (!input.value.includes(tagText)) {
+        if (input.value.trim() === '') {
+          input.value = tagText;
+        } else {
+          input.value += ' ' + tagText;
+        }
+      }
+    }
 
     let recognition;
     let isRecording = false;
@@ -259,7 +305,6 @@
       
       recognition.onstart = function() {
         document.getElementById('feedbackInput').placeholder = "กำลังฟัง... พูดได้เลยครับ";
-        // ดึงข้อความปัจจุบันมาพักไว้ เผื่อลูกค้าอยากพูดต่อจากที่พิมพ์ไว้
         finalTranscript = document.getElementById('feedbackInput').value; 
       };
 
@@ -285,9 +330,8 @@
       isRecording = true; 
       micBtn.classList.add('mic-recording'); 
       
-      // ล้างข้อความเก่าทิ้งทุกครั้งที่กดพูดใหม่ (เพื่อไม่ให้จำคำเก่ามาซ้อน)
-      finalTranscript = ''; 
-      document.getElementById('feedbackInput').value = '';
+      finalTranscript = document.getElementById('feedbackInput').value; 
+      if (finalTranscript !== '') finalTranscript += ' '; 
       
       try { recognition.start(); } catch(e) {} 
     }
