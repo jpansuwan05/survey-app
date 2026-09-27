@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, shrink-to-fit=no">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>ประเมินความพึงพอใจ - สถานีรถไฟชุมพร</title>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -113,7 +114,6 @@
     .card-desc { font-size: 12px; font-weight: 400; opacity: 0.8; }
     .arrow-icon { font-weight: 700; font-size: 18px; }
 
-    /* Level Colors */
     .level-5 { background: linear-gradient(90deg, var(--c5-light) 0%, #fff 80%); border: 1.5px solid var(--c5-light); }
     .level-5 .icon-circle { background: var(--c5); }
     .level-5 .card-title, .level-5 .card-desc { color: #065f46; }
@@ -149,45 +149,33 @@
     }
     .reason-btn:active { background: var(--c2-light); border-color: var(--c2); color: var(--c2); transform: scale(0.96); }
 
-    /* Footer & Forms */
+    /* Loading Spinner */
+    .loader { border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* Footer */
     .footer-text { text-align: center; color: var(--primary); font-weight: 600; font-size: 14px; margin-top: 10px; }
-    .form-input { width: 100%; padding: 14px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 20px; font-size: 15px; font-family: 'Prompt', sans-serif; box-sizing: border-box; background: #f8fafc; }
-    .form-input:focus { border-color: var(--primary); background: #fff; outline: none; }
-    .btn { background-color: var(--primary); color: white; border: none; padding: 14px; font-size: 16px; border-radius: 20px; width: 100%; margin-top: 12px; font-weight: 600; font-family: 'Prompt', sans-serif; cursor: pointer; box-shadow: 0 4px 15px rgba(10, 88, 202, 0.3); }
     
     #offlineBanner { position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--c1); color: white; padding: 10px; text-align: center; font-size: 13px; font-weight: 500; z-index: 9999; transition: transform 0.3s; }
     .banner-hidden { transform: translateY(100%); }
   </style>
 </head>
-<body onload="checkConnection()">
+<body onload="initApp()">
 
   <div id="offlineBanner" class="banner-hidden">
     🔴 ขาดการเชื่อมต่ออินเทอร์เน็ต (ระบบจะบันทึกชั่วคราว) <span id="offlineCount"></span>
   </div>
 
-  <div id="loginView" class="container view-center">
-    <img id="orgLogoLogin" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" style="width: 140px; margin-bottom: 25px;" onclick="hiddenAddStaff()">
-    <h2 style="color: #1e293b; margin-top:0;">เข้าสู่ระบบเจ้าหน้าที่</h2>
-    <input type="text" id="staffId" class="form-input" placeholder="รหัสพนักงาน" required>
-    <input type="password" id="password" class="form-input" placeholder="รหัสผ่าน" required>
-    <button type="button" class="btn" onclick="doLogin()">เข้าสู่ระบบ</button>
-    <p id="loginStatus" style="color:var(--c1); margin-top: 15px; font-size: 14px;"></p>
+  <!-- หน้า Loading สำหรับรอโหลดข้อมูลพนักงานจาก QR Code -->
+  <div id="loadingView" class="container view-center">
+    <div class="loader" id="spinner"></div>
+    <h2 style="color: #1e293b; margin-top:0;" id="loadingTitle">กำลังดึงข้อมูลพนักงาน...</h2>
+    <p id="loadingMsg" style="color: #64748b; font-size: 15px;">กรุณารอสักครู่</p>
   </div>
 
-  <div id="addStaffView" class="container view-center hidden">
-    <h2 style="color: #1e293b; margin-top: 0;">เพิ่มพนักงานใหม่</h2>
-    <input type="text" id="newStaffId" class="form-input" placeholder="รหัสพนักงาน">
-    <input type="text" id="newPassword" class="form-input" placeholder="รหัสผ่าน">
-    <input type="text" id="newName" class="form-input" placeholder="ชื่อ - นามสกุล">
-    <input type="file" id="newPhoto" class="form-input" accept="image/*" style="padding:10px;">
-    <button type="button" class="btn" id="addBtn" onclick="submitNewStaff()">บันทึกข้อมูล</button>
-    <button type="button" class="btn" style="background:#94a3b8; box-shadow:none;" onclick="switchView('loginView')">ยกเลิก</button>
-    <p id="addStatus" style="font-weight: 500; margin-top: 15px; color: var(--primary); font-size: 14px;"></p>
-  </div>
-
-  <!-- HEADER โลโก้และรูปโปรไฟล์ -->
+  <!-- HEADER โลโก้และรูปโปรไฟล์ที่ลอยอยู่ด้านบน -->
   <div id="ratingHeader" class="app-header hidden">
-    <img id="orgLogo" class="header-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800" onclick="hiddenLogout()">
+    <img id="orgLogo" class="header-logo" src="https://drive.google.com/thumbnail?id=1JHzMw7IazbVohWSC_qPal4Qsi0Tps3uK&sz=w800">
     <img id="staffPhoto" class="profile-img" src="">
   </div>
 
@@ -247,7 +235,7 @@
       <button class="reason-btn" onclick="submitFinalRating('ให้ข้อมูลผิด/ไม่ครบ')">❌ ให้ข้อมูลผิด/ไม่ครบ</button>
       <button class="reason-btn" onclick="submitFinalRating('ขั้นตอนยุ่งยาก')">📋 ขั้นตอนยุ่งยาก</button>
     </div>
-    <button class="btn" style="background:#cbd5e1; color:#334155; box-shadow:none; margin-top:20px;" onclick="submitFinalRating('')">ข้าม / ไม่ระบุสาเหตุ</button>
+    <button style="background:transparent; border:none; color:#64748b; font-family:'Prompt'; font-size:15px; margin-top:20px; text-decoration:underline; cursor:pointer;" onclick="submitFinalRating('')">ข้าม / ไม่ระบุสาเหตุ</button>
   </div>
 
   <!-- หน้าขอบคุณ -->
@@ -261,9 +249,6 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbygVT1PEqbRBntvZDEcKeX2ZDTXIm-WEROndkkAbt2UMydMip92mfFUEuxdDDmqf614KA/exec";
 
     let currentStaff = {};
-    let tapCount = 0, tapTimer;
-    let loginTapCount = 0, loginTapTimer;
-    
     let pendingScore = 0;
     let reasonTimer, countdownInterval;
 
@@ -282,6 +267,92 @@
       }
     }
 
+    // ฟังก์ชันเริ่มต้น: อ่าน QR Code (URL Parameter)
+    async function initApp() {
+      checkConnection();
+      const urlParams = new URLSearchParams(window.location.search);
+      const staffId = urlParams.get('id');
+
+      if (!staffId) {
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('loadingTitle').innerText = "ข้อผิดพลาด";
+        document.getElementById('loadingMsg').innerHTML = "<span style='color:#ef4444;'>ไม่พบรหัสพนักงาน<br>กรุณาสแกน QR Code ที่หน้าเคาน์เตอร์อีกครั้ง</span>";
+        return;
+      }
+
+      const res = await apiCall('getStaff', { staffId: staffId });
+      
+      if (res.success) {
+        currentStaff = res;
+        document.getElementById('staffPhoto').src = res.photoUrl;
+        document.getElementById('staffNameDisplay').innerText = res.name;
+        switchView('ratingView');
+      } else {
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('loadingTitle').innerText = "ไม่พบข้อมูล";
+        document.getElementById('loadingMsg').innerHTML = `<span style='color:#ef4444;'>${res.message || "ไม่พบข้อมูลพนักงานรหัสนี้ในระบบ"}</span>`;
+      }
+    }
+
+    function switchView(viewId) {
+      document.querySelectorAll('.container, .app-header').forEach(c => c.classList.add('hidden'));
+      document.getElementById(viewId).classList.remove('hidden');
+      if(viewId === 'ratingView' || viewId === 'reasonView') document.getElementById('ratingHeader').classList.remove('hidden');
+    }
+
+    /* === ฟังก์ชันจัดการการกดให้คะแนน === */
+    function handleRatingClick(score) {
+      if(isRecording) stopMic();
+      
+      if (score >= 4) {
+        let feedback = document.getElementById('feedbackInput').value.trim();
+        sendRating(score, feedback);
+      } else {
+        pendingScore = score;
+        switchView('reasonView');
+        
+        let timeLeft = 5;
+        document.getElementById('reasonCountdown').innerText = timeLeft;
+        
+        countdownInterval = setInterval(() => {
+          timeLeft--;
+          document.getElementById('reasonCountdown').innerText = timeLeft;
+          if (timeLeft <= 0) clearInterval(countdownInterval);
+        }, 1000);
+        
+        reasonTimer = setTimeout(() => {
+          submitFinalRating('');
+        }, 5000);
+      }
+    }
+
+    function submitFinalRating(reasonTag) {
+      clearTimeout(reasonTimer);
+      clearInterval(countdownInterval);
+      
+      let feedback = document.getElementById('feedbackInput').value.trim();
+      if (reasonTag !== '') {
+        feedback = feedback ? feedback + ' (' + reasonTag + ')' : reasonTag;
+      }
+      sendRating(pendingScore, feedback);
+    }
+
+    function sendRating(score, feedback) {
+      switchView('thankyouView');
+      
+      if (navigator.onLine) {
+        apiCall('submitRating', { staffId: currentStaff.staffId, name: currentStaff.name, score: score, feedback: feedback })
+          .then(res => { if(!res.success) saveToLocalStorage(score, feedback); });
+      } else {
+        saveToLocalStorage(score, feedback);
+      }
+      
+      // ให้ค้างหน้าขอบคุณไว้เลย เพราะผู้โดยสารทำผ่านมือถือตัวเอง
+    }
+
+    // ==========================================
+    // ระบบไมโครโฟน
+    // ==========================================
     let recognition;
     let isRecording = false;
     let finalTranscript = ''; 
@@ -340,6 +411,9 @@
     micBtn.addEventListener('mouseleave', stopMic);
     micBtn.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 
+    // ==========================================
+    // ออฟไลน์ 
+    // ==========================================
     window.addEventListener('online', checkConnection);
     window.addEventListener('offline', checkConnection);
 
@@ -354,102 +428,6 @@
       document.getElementById('offlineCount').innerText = data.length > 0 ? ` (${data.length})` : "";
     }
 
-    function switchView(viewId) {
-      document.querySelectorAll('.container, .app-header').forEach(c => c.classList.add('hidden'));
-      document.getElementById(viewId).classList.remove('hidden');
-      // แสดง Header โลโก้ เฉพาะหน้า Rating และ Reason
-      if(viewId === 'ratingView' || viewId === 'reasonView') document.getElementById('ratingHeader').classList.remove('hidden');
-    }
-
-    function hiddenAddStaff() {
-      loginTapCount++; clearTimeout(loginTapTimer);
-      if(loginTapCount >= 3) { loginTapCount = 0; switchView('addStaffView'); }
-      loginTapTimer = setTimeout(() => { loginTapCount = 0; }, 1500);
-    }
-
-    async function doLogin() {
-      if(!navigator.onLine) return alert("กรุณาเชื่อมต่ออินเทอร์เน็ต");
-      const id = document.getElementById('staffId').value;
-      const pass = document.getElementById('password').value;
-      if(!id || !pass) return;
-      
-      document.getElementById('loginStatus').innerText = "กำลังตรวจสอบข้อมูล...";
-      try{ document.documentElement.requestFullscreen(); }catch(e){} 
-
-      const res = await apiCall('login', { staffId: id, password: pass });
-      
-      if(res.success) {
-        currentStaff = res;
-        document.getElementById('staffPhoto').src = res.photoUrl;
-        document.getElementById('staffNameDisplay').innerText = res.name;
-        switchView('ratingView');
-        document.getElementById('loginStatus').innerText = "";
-        document.getElementById('staffId').value = ""; document.getElementById('password').value = "";
-      } else {
-        document.getElementById('loginStatus').innerText = res.message;
-      }
-    }
-
-    /* === ฟังก์ชันจัดการการกดให้คะแนน (ใหม่) === */
-    function handleRatingClick(score) {
-      if(isRecording) stopMic();
-      
-      if (score >= 4) {
-        // ถ้าให้ 4 หรือ 5 ดาว ส่งข้อมูลและไปหน้าขอบคุณทันที
-        let feedback = document.getElementById('feedbackInput').value.trim();
-        sendRating(score, feedback);
-      } else {
-        // ถ้าให้ 1-3 ดาว เด้งไปหน้าถามสาเหตุ
-        pendingScore = score;
-        switchView('reasonView');
-        
-        let timeLeft = 5; // จับเวลา 5 วินาที
-        document.getElementById('reasonCountdown').innerText = timeLeft;
-        
-        countdownInterval = setInterval(() => {
-          timeLeft--;
-          document.getElementById('reasonCountdown').innerText = timeLeft;
-          if (timeLeft <= 0) clearInterval(countdownInterval);
-        }, 1000);
-        
-        reasonTimer = setTimeout(() => {
-          // ถ้าครบ 5 วิแล้วไม่ได้กดอะไร ส่งข้อมูลทันที
-          submitFinalRating('');
-        }, 5000);
-      }
-    }
-
-    /* === ฟังก์ชันเมื่อลูกค้ากดเลือกสาเหตุ หรือหมดเวลา === */
-    function submitFinalRating(reasonTag) {
-      // หยุดจับเวลาทันที
-      clearTimeout(reasonTimer);
-      clearInterval(countdownInterval);
-      
-      let feedback = document.getElementById('feedbackInput').value.trim();
-      
-      // เอาข้อความที่พิมพ์ไว้ มารวมกับปุ่มสาเหตุที่กด
-      if (reasonTag !== '') {
-        feedback = feedback ? feedback + ' (' + reasonTag + ')' : reasonTag;
-      }
-      
-      sendRating(pendingScore, feedback);
-    }
-
-    function sendRating(score, feedback) {
-      switchView('thankyouView');
-      
-      if (navigator.onLine) {
-        apiCall('submitRating', { staffId: currentStaff.staffId, name: currentStaff.name, score: score, feedback: feedback })
-          .then(res => { if(!res.success) saveToLocalStorage(score, feedback); });
-      } else {
-        saveToLocalStorage(score, feedback);
-      }
-      
-      // ล้างข้อมูลเก่าทิ้ง เตรียมพร้อมสำหรับคิวต่อไป
-      document.getElementById('feedbackInput').value = "";
-      setTimeout(() => { switchView('ratingView'); }, 1800);
-    }
-
     function saveToLocalStorage(score, feedback) {
       let data = JSON.parse(localStorage.getItem('offlineRatings') || '[]');
       data.push({ timestamp: new Date().toISOString(), staffId: currentStaff.staffId, name: currentStaff.name, score: score, feedback: feedback });
@@ -462,51 +440,6 @@
       if (data.length > 0) {
         const res = await apiCall('syncOfflineRatings', { offlineData: data });
         if(res.success) { localStorage.removeItem('offlineRatings'); document.getElementById('offlineCount').innerText = ""; }
-      }
-    }
-
-    function hiddenLogout() {
-      tapCount++; clearTimeout(tapTimer);
-      if(tapCount >= 5) {
-        tapCount = 0;
-        if(confirm('ต้องการปิดหน้าต่าง / เปลี่ยนกะ ใช่หรือไม่?')) { currentStaff = {}; switchView('loginView'); try{document.exitFullscreen();}catch(e){} }
-      }
-      tapTimer = setTimeout(() => { tapCount = 0; }, 2000);
-    }
-
-    async function submitNewStaff() {
-      const id = document.getElementById('newStaffId').value;
-      const pass = document.getElementById('newPassword').value;
-      const name = document.getElementById('newName').value;
-      const file = document.getElementById('newPhoto').files[0];
-      if(!id || !pass || !name) return;
-      
-      document.getElementById('addBtn').disabled = true;
-      document.getElementById('addStatus').innerText = "กำลังบันทึกข้อมูล...";
-      
-      if(file) {
-        const reader = new FileReader();
-        reader.onload = async function(e) { 
-          const res = await apiCall('addStaff', { staffId: id, password: pass, name: name, fileData: e.target.result, fileName: file.name });
-          onAddSuccess(res);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        const res = await apiCall('addStaff', { staffId: id, password: pass, name: name, fileData: "", fileName: "" });
-        onAddSuccess(res);
-      }
-    }
-
-    function onAddSuccess(res) {
-      document.getElementById('addBtn').disabled = false;
-      document.getElementById('addStatus').innerText = res.message;
-      if(res.success) { 
-        setTimeout(() => { 
-          document.getElementById('newStaffId').value = ""; document.getElementById('newPassword').value = ""; 
-          document.getElementById('newName').value = ""; document.getElementById('newPhoto').value = "";
-          document.getElementById('addStatus').innerText = "";
-          switchView('loginView'); 
-        }, 1500); 
       }
     }
   </script>
